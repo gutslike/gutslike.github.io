@@ -1,0 +1,195 @@
+---
+import BaseHead from '../../../../components/BaseHead.astro';
+import Header from '../../../../components/Header.astro';
+import Footer from '../../../../components/Footer.astro';
+
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths(){
+
+	const posts = await getCollection('blog');
+
+	const validPosts = posts.filter(post => {
+
+		const parts = post.id.split('/');
+
+		return parts.length >= 3;
+
+	});
+
+	return validPosts.map(post => {
+
+		const parts = post.id.split('/');
+
+		return {
+
+			params: {
+
+				topic: parts[0],
+
+				series: parts[1]
+
+			}
+
+		};
+
+	});
+
+}
+
+const { topic, series } =
+	Astro.params;
+
+const posts =
+(await getCollection('blog'))
+
+.filter(post=>{
+
+	const parts =
+	post.id.split('/');
+
+	return (
+
+		parts[0]===topic &&
+
+		parts[1]===series
+
+	);
+
+});
+---
+
+<html>
+
+<head>
+
+<BaseHead
+	title={series}
+	description="Posts"
+/>
+
+</head>
+
+<body>
+
+<Header />
+
+<main class="container">
+
+	<h1>
+		{series}
+	</h1>
+
+	<ul class="post-list">
+
+		{
+
+			posts.map(post => (
+
+				<li>
+
+					<a
+					class="post-card"
+					href={`/blog/${post.id.replace(".md","")}/`}
+					>
+
+						<h3>
+
+							{post.data.title}
+
+						</h3>
+
+						<p>
+
+							{
+								post.data.description
+							}
+
+						</p>
+
+					</a>
+
+				</li>
+
+			))
+
+		}
+
+	</ul>
+
+</main>
+
+<Footer />
+
+</body>
+
+</html>
+<style>
+
+.container{
+
+	max-width:900px;
+
+	margin:auto;
+
+	padding:3rem 1.5rem;
+
+}
+
+.post-list{
+
+	list-style:none;
+
+	padding:0;
+
+	display:flex;
+
+	flex-direction:column;
+
+	gap:1.5rem;
+
+}
+
+.post-card{
+
+	display:block;
+
+	padding:2rem;
+
+	border-radius:24px;
+
+	text-decoration:none;
+
+	background:white;
+
+	border:
+
+	1px solid
+	rgba(0,0,0,.08);
+
+	box-shadow:
+
+	0 8px 25px
+	rgba(0,0,0,.05);
+
+	color:inherit;
+
+	transition:.2s;
+
+}
+
+.post-card:hover{
+
+	transform:
+
+	translateY(-4px);
+
+}
+
+.post-card h3{
+
+	margin-top:0;
+
+}
+
+</style>

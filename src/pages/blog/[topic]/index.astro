@@ -1,0 +1,173 @@
+---
+import BaseHead from '../../../components/BaseHead.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+
+	const posts = await getCollection('blog');
+
+	const topics = [...new Set(
+		posts.map(p => p.id.split('/')[0])
+	)];
+
+	return topics.map(topic => ({
+		params:{ topic }
+	}));
+}
+
+const { topic } = Astro.params;
+
+const posts = await getCollection('blog');
+
+const series = [...new Set(
+
+	posts
+
+	.filter(
+		p => p.id.startsWith(topic + "/")
+	)
+
+	.map(
+		p => p.id.split('/')[1]
+	)
+
+)];
+---
+
+<html>
+
+<head>
+
+<BaseHead
+	title={topic}
+	description="Series"
+/>
+
+</head>
+
+<body>
+
+<Header />
+
+<main class="container">
+
+	<div class="hero">
+
+		<h1>
+			{topic}
+		</h1>
+
+		<p>
+			Series and structured learning paths.
+		</p>
+
+	</div>
+
+	<div class="grid">
+
+		{
+			series.map(item => (
+
+				<a
+					class="card"
+					href={`/blog/${topic}/${item}`}
+				>
+
+					<h2>
+						{item}
+					</h2>
+
+					<p>
+
+						Explore posts
+						inside this series.
+
+					</p>
+
+				</a>
+
+			))
+		}
+
+	</div>
+
+</main>
+
+<Footer />
+
+</body>
+
+</html>
+<style>
+
+.container{
+
+	max-width:1100px;
+
+	margin:auto;
+
+	padding:3rem 1.5rem;
+
+}
+
+.hero{
+
+	text-align:center;
+
+	margin-bottom:4rem;
+
+}
+
+.grid{
+
+	display:grid;
+
+	grid-template-columns:
+
+	repeat(
+		auto-fit,
+		minmax(320px,1fr)
+	);
+
+	gap:2rem;
+
+}
+
+.card{
+
+	padding:2rem;
+
+	border-radius:28px;
+
+	background:white;
+
+	border:
+
+	1px solid
+	rgba(0,0,0,.08);
+
+	box-shadow:
+
+	0 10px 30px
+	rgba(0,0,0,.06);
+
+	text-decoration:none;
+
+	color:inherit;
+
+	transition:.25s;
+
+}
+
+.card:hover{
+
+	transform:
+
+	translateY(-6px);
+
+}
+
+</style>

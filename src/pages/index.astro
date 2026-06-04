@@ -1,4 +1,5 @@
 ---
+
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
@@ -6,92 +7,105 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
 <!doctype html>
+
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 	</head>
-	<body>
-		<Header />
-			<main>
-				<section>
-					<h1>Manubhav Sharma</h1>
 
-					<p>
-						Computer Science (AI) student, builder, and lifelong learner exploring
-						the intersection of artificial intelligence, software engineering,
-						and scalable systems.
-					</p>
+<body>
+	<Header />
 
-					<p>
-						I use this space to document what I learn, build projects publicly,
-						and break down concepts into structured notes and guides.
-					</p>
-				</section>
+	<main>
+		<section class="hero">
+			<h1>Hi, I'm Manubhav Sharma</h1>
 
-				<section>
-					<h2>About Me</h2>
+			<p>
+				Computer Science (AI) student building projects, exploring systems,
+				and documenting everything I learn along the way.
+			</p>
 
-					<p>
-						I am currently pursuing a degree in Computer Science with a focus on AI.
-						My interests span machine learning, software architecture,
-						system design, and solving engineering problems through code.
-					</p>
+			<p>
+				This blog is my digital notebook — a place for experiments,
+				project breakdowns, technical notes, and lessons learned while
+				building real-world applications.
+			</p>
+		</section>
 
-					<p>
-						I enjoy turning complex ideas into practical systems and sharing
-						the process openly through projects and technical writing.
-					</p>
-				</section>
+		<section>
+			<h2>What You'll Find Here</h2>
 
-				<section>
-					<h2>What I Work On</h2>
+			<p>
+				I believe the fastest way to learn is to build publicly.
+				Here I share concepts, mistakes, debugging journeys,
+				and practical implementation details.
+			</p>
 
-					<ul>
-						<li>Artificial Intelligence & Machine Learning</li>
-						<li>Software Engineering</li>
-						<li>System Design</li>
-						<li>Full Stack Development</li>
-						<li>Performance Focused Problem Solving</li>
-					</ul>
-				</section>
+			<ul>
+				<li>Technical tutorials and explainers</li>
+				<li>Project architecture breakdowns</li>
+				<li>AI experiments and implementations</li>
+				<li>Development notes and debugging stories</li>
+				<li>System design learnings</li>
+			</ul>
+		</section>
 
-				<section>
-					<h2>Current Focus Areas</h2>
+		<section>
+			<h2>Things I Enjoy Building</h2>
 
-					<ul>
-						<li>Deep Learning & Neural Networks</li>
-						<li>Building AI-powered applications</li>
-						<li>Data Structures & Algorithms</li>
-						<li>Distributed Systems</li>
-						<li>Developer Productivity Systems</li>
-					</ul>
-				</section>
+			<ul>
+				<li>AI-powered applications</li>
+				<li>Full-stack web platforms</li>
+				<li>Mobile applications</li>
+				<li>Developer tools and productivity systems</li>
+				<li>Automation workflows</li>
+			</ul>
+		</section>
 
-				<section>
-					<h2>Featured Projects</h2>
+		<section>
+			<h2>Current Focus</h2>
 
-					<ul>
-						<li>FIR Classification System using NLP and Deep Learning</li>
-						<li>Collaborative Team Management Platform</li>
-						<li>Bluetooth Data Streaming & Graphing App</li>
-						<li>Expense Tracking Platform</li>
-					</ul>
-				</section>
+			<ul>
+				<li>Deep Learning & Neural Networks</li>
+				<li>Scalable System Design</li>
+				<li>Data Structures & Algorithms</li>
+				<li>Software Testing Methodologies</li>
+				<li>Performance-focused engineering</li>
+			</ul>
+		</section>
 
-				<section>
-					<h2>Why This Blog Exists</h2>
+		<section>
+			<h2>Projects I'm Proud Of</h2>
 
-					<p>
-						This website is my knowledge base — a place where I document concepts,
-						project learnings, experiments, failures, and technical explorations.
-					</p>
+			<ul>
+				<li>FIR Classification System using NLP and Deep Learning</li>
+				<li>Collaborative Team Management Platform</li>
+				<li>Bluetooth Data Streaming & Visualization App</li>
+				<li>Expense Tracking Platform</li>
+			</ul>
+		</section>
 
-					<p>
-						If something helped me understand a topic better,
-						it will probably end up here.
-					</p>
-				</section>
-			</main>
-		<Footer />
-	</body>
+		<section>
+			<h2>Why This Blog Exists</h2>
+
+			<p>
+				I created this space because documenting ideas forces me
+				to understand them better.
+			</p>
+
+			<p>
+				If a concept, project, bug, or experiment taught me something useful,
+				there’s a good chance it will end up here.
+			</p>
+
+			<p>
+				Learn. Build. Break things. Repeat.
+			</p>
+		</section>
+	</main>
+
+	<Footer />
+</body>
+```
+
 </html>

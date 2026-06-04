@@ -1,114 +1,355 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const posts = await getCollection('blog');
+
+const topicInfo: Record<
+	string,
+	{
+		description: string;
+	}
+> = {
+
+	devops: {
+		description:
+			"Cloud, Linux, infrastructure, deployment workflows, and platform engineering.",
+	},
+
+	leetcode: {
+		description:
+			"Algorithms, problem solving patterns, data structures, and coding notes.",
+	},
+
+	ai: {
+		description:
+			"Machine learning, neural networks, experiments, and AI concepts.",
+	}
+
+};
+
+const topics = [...new Set(
+	posts.map(post => post.id.split('/')[0])
+)];
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			main {
-				width: 960px;
-			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
+<html>
+
+<head>
+	<BaseHead title="Blog" description="Topics" />
+</head>
+
+<body>
+
+<Header />
+
+<main class="container">
+
+	<div class="hero">
+
+		<h1>Topics</h1>
+
+		<p>
+			Browse concepts, projects, notes, and learning paths.
+		</p>
+
+	</div>
+
+	<div class="grid">
+
+		{
+			topics.map(topic => (
+
+				<a
+					class="card"
+					href={`/blog/${topic}`}
+				>
+
+					<div class="card-content">
+
+	<h2>
+
+		{
+			topic.charAt(0).toUpperCase()
+			+
+			topic.slice(1)
+		}
+
+	</h2>
+
+	<p>
+
+		{
+			topicInfo[topic]?.description
+			||
+			"Explore notes, series, and learnings."
+		}
+
+	</p>
+
+</div>
+
+				</a>
+
+			))
+		}
+
+	</div>
+
+</main>
+
+<Footer />
+
+</body>
+
 </html>
+
+<style>
+body{
+	background-color: crimson;
+	min-height:100%;
+	margin:0;
+}
+.container{
+
+	max-width:1100px;
+
+	margin:auto;
+
+	padding:
+	3rem
+	1.5rem
+	6rem;
+
+	min-height:80vh;
+
+}
+
+.hero{
+
+	text-align:center;
+
+	margin-bottom:4rem;
+
+}
+
+.hero h1{
+
+	margin-bottom:.75rem;
+
+	font-size:3rem;
+
+}
+
+.hero p{
+
+	color:rgb(var(--gray));
+
+	font-size:1.05rem;
+
+	max-width:650px;
+
+	margin:auto;
+
+	line-height:1.7;
+
+}
+
+.grid{
+
+	display:grid;
+
+	grid-template-columns:
+
+	repeat(
+		12,
+		1fr
+	);
+
+	gap:1.5rem;
+
+	max-width:1200px;
+
+	margin:auto;
+
+}
+
+.card{
+
+	position:relative;
+
+	padding:2.5rem;
+
+	border-radius:28px;
+
+	text-decoration:none;
+
+	background:
+
+	linear-gradient(
+
+		145deg,
+
+		rgba(255,255,255,.95),
+
+		rgba(255,255,255,.75)
+
+	);
+
+	backdrop-filter:
+	blur(12px);
+
+	border:
+
+	1px solid
+	var(--border);
+
+	box-shadow:
+	var(--shadow);
+
+	overflow:hidden;
+
+	min-height:220px;
+
+	display:flex;
+
+	flex-direction:column;
+
+	justify-content:space-between;
+
+	transition:
+
+	transform .25s ease,
+
+	box-shadow .25s ease;
+
+}
+
+.card:hover{
+
+	transform:
+
+	translateY(-8px);
+
+	box-shadow:
+
+	0 20px 45px
+	rgba(42,77,20,.14);
+
+}
+
+.card-content{
+
+	max-width:70%;
+
+}
+
+.card h2{
+
+	font-size:2rem;
+
+	margin:0;
+
+	font-weight:700;
+
+}
+
+.card p{
+
+	line-height:1.7;
+
+	color:inherit;
+
+	opacity:.8;
+
+}
+
+
+.card:hover .arrow{
+
+	transform:translateX(8px);
+
+	opacity:1;
+
+}
+
+.card:nth-child(1){
+
+	grid-column:
+	span 8;
+
+	background:
+
+	linear-gradient(
+		135deg,
+
+		var(--dark-spruce),
+
+		var(--green)
+	);
+
+	color:white;
+
+}
+
+.card:nth-child(2){
+
+	grid-column:
+	span 4;
+
+}
+
+.card:nth-child(3){
+
+	grid-column:
+	span 5;
+
+}
+
+.card:nth-child(4){
+
+	grid-column:
+	span 7;
+
+	background:
+
+	linear-gradient(
+
+		135deg,
+
+		var(--emerald),
+
+		var(--aquamarine)
+
+	);
+
+}
+
+.card:nth-child(n+5){
+
+	grid-column:
+	span 6;
+
+}
+@media(max-width:900px){
+
+	.grid{
+
+		grid-template-columns:
+		1fr;
+
+	}
+
+	.card{
+
+		grid-column:
+		span 1 !important;
+
+		min-height:180px;
+
+	}
+
+}
+</style>
