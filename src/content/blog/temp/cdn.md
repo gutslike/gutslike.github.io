@@ -1,5 +1,5 @@
 ---
-title: "First post"
+title: "CDN and SANITY"
 description: "Lorem ipsum dolor sit amet"
 pubDate: "Jul 08 2022"
 heroImage: "../../../assets/blog-placeholder-3.jpg"
@@ -12,7 +12,7 @@ a place where our images are uploaded,
 the links of those images,
 and make the images load faster.
 
-Thus came in sanity js. It provides the services we need- we can host our images here, the images can be fetched using a link, and they have their own cdn which provides these images to the recepient.
+Thus came in sanity.io It provides the services we need- we can host our images here, the images can be fetched using a link, and they have their own cdn which provides these images to the recepient.
 
 Now, how does cdn help and what is it.
 
