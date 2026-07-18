@@ -1,4 +1,3 @@
-```md
 ---
 title: "0. Introduction"
 description: "About this series"
@@ -31,4 +30,3 @@ Rather than explaining every topic in exhaustive detail, I'll focus on:
 My aim is to create notes that are useful not only for readers but also for myself whenever I need a quick refresher on a topic.
 
 If you're following the same roadmap or preparing for interviews, competitive programming, or Python-based development, I hope you'll find this series useful.
-```
