@@ -1,7 +1,7 @@
 ---
 title: "Python Basics: Syntax Essentials"
 description: "A concise guide to Python syntax and the core ideas every beginner should know."
-pubDate: "Jul 22 2026"
+pubDate: "Jul 29 2026"
 ---
 
 Python is known for its clean and readable syntax. If you are starting out, the most important things to learn early are indentation, variables, basic operators, and how Python handles data.

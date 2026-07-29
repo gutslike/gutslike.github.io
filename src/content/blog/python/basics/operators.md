@@ -1,7 +1,7 @@
 ---
 title: "Python Basics: Operators"
 description: "A concise overview of Python operators and how they are used in everyday code."
-pubDate: "Jul 22 2026"
+pubDate: "Jul 29 2026"
 ---
 
 Operators are used to perform actions on values and variables. In Python, they help with math, comparisons, logic, and assignment.
