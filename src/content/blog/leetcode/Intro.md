@@ -1,7 +1,7 @@
 ---
 title: "Dsa using go"
 description: "Follow me on my journey of dsa mastery with go"
-pubDate: "Jul 08 2022"
+pubDate: "july 18 2026"
 heroImage: "../../../assets/blog-placeholder-3.jpg"
 ---
 

@@ -1,3 +1,9 @@
+---
+title: "Contains Duplicate"
+description: "A simple explanation of the Contains Duplicate problem and a Go-based solution using a map."
+pubDate: "Aug 04 2026"
+---
+
 # Contains Duplicate
 
 ## Problem Summary
