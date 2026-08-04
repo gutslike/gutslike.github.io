@@ -1,9 +1,11 @@
 ---
 title: "Introduction to Go"
 description: "A beginner-friendly introduction to Go, covering why it is useful, how to set it up, and how the go command works."
-pubDate: "2026-07-30"
+pubDate: "Aug 04 2026"
 heroImage: "../../../assets/blog-placeholder-1.jpg"
 ---
+
+## Introduction to go
 
 Go is a statically typed, compiled programming language developed at Google. It is designed for simplicity, strong performance, and built-in support for concurrency. With features like garbage collection, strong typing, fast compilation, and goroutines, Go is a great choice for backend services, CLI tools, and distributed systems.
 
