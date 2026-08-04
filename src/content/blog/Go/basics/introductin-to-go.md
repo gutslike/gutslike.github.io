@@ -2,7 +2,7 @@
 title: "Introduction to Go"
 description: "A beginner-friendly introduction to Go, covering why it is useful, how to set it up, and how the go command works."
 pubDate: "Aug 04 2026"
-heroImage: "../../../assets/blog-placeholder-1.jpg"
+heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 ## Introduction to go

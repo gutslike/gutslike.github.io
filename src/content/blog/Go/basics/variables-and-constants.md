@@ -2,7 +2,7 @@
 title: "Variables and Constants"
 description: "A beginner-friendly guide to variables, constants, scope, zero values, and best practices in Go."
 pubDate: "Aug 05 2026"
-heroImage: "../../../assets/blog-placeholder-1.jpg"
+heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 # Variables and Constants in Go
