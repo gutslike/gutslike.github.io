@@ -5,8 +5,6 @@ pubDate: "Aug 05 2026"
 heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
-# Variables and Constants in Go
-
 Variables are used to store values that can change during the program. Constants are used for values that should stay fixed.
 
 ## 1. Types of variables with examples

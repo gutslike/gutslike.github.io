@@ -4,8 +4,6 @@ description: "A simple explanation of the Valid Anagram problem using Go."
 pubDate: "Aug 06 2026"
 ---
 
-# Valid Anagram
-
 ## Problem Summary
 
 The problem says-

@@ -4,8 +4,6 @@ description: "A simple explanation of the Smallest Divisible Digit Product I pro
 pubDate: "Aug 07 2026"
 ---
 
-# Smallest Divisible Digit Product I
-
 ## Problem Summary
 
 We are given two integers n and t.
