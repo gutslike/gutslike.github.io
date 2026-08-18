@@ -1,7 +1,7 @@
 ---
 title: "Data Types in Go"
 description: "A concise guide to integers, floating-point numbers, complex numbers, booleans, runes, strings, and type conversions in Go."
-pubDate: "Aug 09 2026"
+pubDate: "Aug 06 2026"
 heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
