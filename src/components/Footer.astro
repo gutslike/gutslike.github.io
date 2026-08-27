@@ -6,15 +6,12 @@ const year = new Date().getFullYear();
 
 <footer>
 	<div class="inner">
-		<span class="colophon">
-			© {year} {PROFILE.name} · Set in JetBrains Mono and Source Serif 4 · Built with Astro
-		</span>
+		<span class="colophon">© {year} {PROFILE.name}</span>
 
 		<nav class="links" aria-label="Elsewhere">
 			<a href={PROFILE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
 			<a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
 			<a href={`mailto:${PROFILE.email}`}>Email</a>
-			<a href="/rss.xml">RSS</a>
 		</nav>
 	</div>
 </footer>
