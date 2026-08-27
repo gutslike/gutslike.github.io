@@ -1,0 +1,4 @@
+# The route baseline is compared byte-for-byte by CI and by
+# scripts/check-routes.mjs. Keep it LF on every platform.
+docs/route-baseline.txt text eol=lf
+scripts/*.mjs text eol=lf
