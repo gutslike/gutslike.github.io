@@ -158,3 +158,40 @@ export function seriesIndex(all: Post[]): SeriesEntry[] {
 export function standalonePosts(all: Post[]): Post[] {
 	return all.filter((post) => topicOf(post) && !seriesOf(post)).sort(byNewest);
 }
+
+/** Words that stay lowercase inside a title, but not at the start of one. */
+const MINOR_WORDS = new Set([
+	'a',
+	'an',
+	'and',
+	'as',
+	'at',
+	'but',
+	'by',
+	'for',
+	'in',
+	'of',
+	'on',
+	'or',
+	'the',
+	'to',
+	'vs',
+	'with',
+]);
+
+/**
+ * A folder slug as a human-readable label: `composite-types` -> `Composite
+ * Types`, `arrays-and-hashing` -> `Arrays and Hashing`.
+ *
+ * Display-only — nothing routes on this, so it can be changed freely.
+ */
+export function labelOf(slug: string): string {
+	return slug
+		.split('-')
+		.map((word, i) =>
+			i > 0 && MINOR_WORDS.has(word)
+				? word
+				: word.charAt(0).toUpperCase() + word.slice(1),
+		)
+		.join(' ');
+}

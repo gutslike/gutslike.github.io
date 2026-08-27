@@ -1,94 +1,375 @@
 ---
+import { Image } from 'astro:assets';
+import photo from '../assets/photo.jpg';
+import FormattedDate from '../components/FormattedDate.astro';
+import LeaderRow from '../components/LeaderRow.astro';
+import Section from '../components/Section.astro';
 import Base from '../layouts/Base.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { SITE_DESCRIPTION } from '../consts';
+import {
+	byNewest,
+	getPosts,
+	labelOf,
+	seriesIndex,
+	standalonePosts,
+} from '../lib/posts';
+import { PROFILE, PROJECTS, SKILLS } from '../lib/profile';
+
+const posts = await getPosts();
+const allSeries = seriesIndex(posts);
+const notes = standalonePosts(posts);
+const latest = [...posts].sort(byNewest).slice(0, 3);
+
 ---
 
-<Base title={SITE_TITLE} description={SITE_DESCRIPTION}>
+<Base title={PROFILE.name} description={SITE_DESCRIPTION}>
 	<main>
-		<section class="hero">
-			<h1>Hi, I'm Manubhav Sharma</h1>
+		<Section n="0" label="Who">
+			<div class="who">
+				<div class="who-text">
+					<h1>{PROFILE.name}</h1>
+					<p class="tagline">{PROFILE.tagline}</p>
 
-			<p>
-				Computer Science (AI) student building projects, exploring systems,
-				and documenting everything I learn along the way.
+					<p>
+						MERN stack, RESTful APIs with Node and Express, React interfaces —
+						and a habit of testing what I build, with Playwright, Cypress and
+						Selenium.
+					</p>
+
+					<p>
+						B.Tech CSE at ABES Institute of Technology, class of 2026. Based in
+						{' '}{PROFILE.location}. Most of what I learn ends up written down
+						on this site.
+					</p>
+
+					<div class="actions">
+						<a class="btn" href={PROFILE.cv} download>Download CV</a>
+						<a
+							class="btn ghost"
+							href={PROFILE.github}
+							target="_blank"
+							rel="noopener noreferrer">GitHub</a
+						>
+					</div>
+				</div>
+
+				<figure class="plate">
+					<Image
+						src={photo}
+						alt={PROFILE.name}
+						width={300}
+						height={400}
+						densities={[1, 2]}
+					/>
+					<figcaption>{PROFILE.location}</figcaption>
+				</figure>
+			</div>
+		</Section>
+
+		<Section n="1" label="Toolkit">
+			<dl class="groups">
+				{
+					SKILLS.map((group) => (
+						<div class="group">
+							<dt>{group.label}</dt>
+							<dd>{group.items.join(' · ')}</dd>
+						</div>
+					))
+				}
+			</dl>
+		</Section>
+
+		<Section n="2" label="Built">
+			<div class="projects">
+				{
+					PROJECTS.map((project) => (
+						<article class="project">
+							<LeaderRow href={project.href}>
+								<span class="pn">{project.n}</span>
+								{project.title}
+								<Fragment slot="right">{project.stack}</Fragment>
+							</LeaderRow>
+							<p>{project.blurb}</p>
+							{project.href && (
+								<a
+									class="demo"
+									href={project.href}
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{project.hrefLabel} →
+								</a>
+							)}
+						</article>
+					))
+				}
+			</div>
+		</Section>
+
+		<Section n="3" label="Writing">
+			<p class="summary">
+				{posts.length} posts, {allSeries.length} series, {notes.length} loose notes.
 			</p>
 
-			<p>
-				This blog is my digital notebook — a place for experiments,
-				project breakdowns, technical notes, and lessons learned while
-				building real-world applications.
-			</p>
-		</section>
+			<div class="rows">
+				{
+					allSeries.slice(0, 5).map((entry) => (
+						<LeaderRow href={`/blog/${entry.topic}/${entry.series}/`}>
+							{labelOf(entry.series)}
+							<Fragment slot="right">
+								{entry.topic} · {entry.posts.length}
+							</Fragment>
+						</LeaderRow>
+					))
+				}
+			</div>
 
-		<section>
-			<h2>What You'll Find Here</h2>
+			<h2 class="sub">Most recent</h2>
+			<div class="rows">
+				{
+					latest.map((post) => (
+						<LeaderRow href={`/blog/${post.id}/`}>
+							{post.data.title}
+							<Fragment slot="right">
+								<FormattedDate date={post.data.pubDate} />
+							</Fragment>
+						</LeaderRow>
+					))
+				}
+			</div>
 
-			<p>
-				I believe the fastest way to learn is to build publicly.
-				Here I share concepts, mistakes, debugging journeys,
-				and practical implementation details.
-			</p>
+			<a class="more" href="/blog">Everything I've written →</a>
+		</Section>
 
-			<ul>
-				<li>Technical tutorials and explainers</li>
-				<li>Project architecture breakdowns</li>
-				<li>AI experiments and implementations</li>
-				<li>Development notes and debugging stories</li>
-				<li>System design learnings</li>
-			</ul>
-		</section>
-
-		<section>
-			<h2>Things I Enjoy Building</h2>
-
-			<ul>
-				<li>AI-powered applications</li>
-				<li>Full-stack web platforms</li>
-				<li>Mobile applications</li>
-				<li>Developer tools and productivity systems</li>
-				<li>Automation workflows</li>
-			</ul>
-		</section>
-
-		<section>
-			<h2>Current Focus</h2>
-
-			<ul>
-				<li>Deep Learning & Neural Networks</li>
-				<li>Scalable System Design</li>
-				<li>Data Structures & Algorithms</li>
-				<li>Software Testing Methodologies</li>
-				<li>Performance-focused engineering</li>
-			</ul>
-		</section>
-
-		<section>
-			<h2>Projects I'm Proud Of</h2>
-
-			<ul>
-				<li>FIR Classification System using NLP and Deep Learning</li>
-				<li>Collaborative Team Management Platform</li>
-				<li>Bluetooth Data Streaming & Visualization App</li>
-				<li>Expense Tracking Platform</li>
-			</ul>
-		</section>
-
-		<section>
-			<h2>Why This Blog Exists</h2>
-
-			<p>
-				I created this space because documenting ideas forces me
-				to understand them better.
-			</p>
-
-			<p>
-				If a concept, project, bug, or experiment taught me something useful,
-				there’s a good chance it will end up here.
-			</p>
-
-			<p>
-				Learn. Build. Break things. Repeat.
-			</p>
-		</section>
+		<Section n="4" label="Elsewhere">
+			<div class="elsewhere">
+				<a href={PROFILE.github} target="_blank" rel="noopener noreferrer">GitHub</a>
+				<a href={PROFILE.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+				<a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+			</div>
+		</Section>
 	</main>
 </Base>
+
+<style>
+	main {
+		--main-max: 60rem;
+	}
+
+	/* --- section 0, who --- */
+	.who {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 300px;
+		gap: 2.5rem;
+		align-items: start;
+	}
+
+	h1 {
+		font-size: var(--text-h1);
+		margin: 0 0 0.35rem;
+	}
+
+	.tagline {
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: var(--text-label);
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--accent);
+		margin: 0 0 1.5rem;
+	}
+
+	.who-text p {
+		max-width: 46ch;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.7rem;
+		margin-top: 1.75rem;
+	}
+
+	.btn {
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: var(--text-label);
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		text-decoration: none;
+		padding: 0.8em 1.4em;
+		border: 1px solid var(--accent);
+		border-radius: var(--radius);
+		background: var(--accent);
+		color: var(--on-accent);
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.btn:hover {
+		background: var(--accent-hover);
+		border-color: var(--accent-hover);
+		color: var(--on-accent);
+	}
+
+	.btn.ghost {
+		background: none;
+		color: var(--accent);
+	}
+
+	.btn.ghost:hover {
+		background: none;
+		color: var(--accent-hover);
+		border-color: var(--accent-hover);
+	}
+
+	/* A plate in a paper, not a hero portrait. */
+	.plate {
+		margin: 0;
+	}
+
+	.plate :global(img) {
+		display: block;
+		width: 100%;
+		height: auto;
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+	}
+
+	.plate figcaption {
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: var(--text-label);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--muted);
+		margin-top: 0.5rem;
+	}
+
+	/* --- section 1, toolkit --- */
+	.groups {
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	.group {
+		display: grid;
+		grid-template-columns: 7rem minmax(0, 1fr);
+		gap: 1rem;
+		align-items: baseline;
+	}
+
+	.group dt {
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: var(--text-label);
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--muted);
+	}
+
+	.group dd {
+		margin: 0;
+	}
+
+	/* --- section 2, built --- */
+	.projects {
+		display: flex;
+		flex-direction: column;
+		gap: 1.75rem;
+	}
+
+	.project p {
+		margin: 0.6rem 0 0;
+		max-width: 62ch;
+		color: var(--muted);
+		font-size: 0.95em;
+	}
+
+	.pn {
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: var(--text-label);
+		font-weight: 700;
+		color: var(--muted);
+		margin-right: 0.7em;
+		font-variant-numeric: tabular-nums;
+	}
+
+	.demo {
+		display: inline-block;
+		margin-top: 0.5rem;
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: var(--text-label);
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		text-decoration: none;
+	}
+
+	/* --- section 3, writing --- */
+	.summary {
+		margin: 0 0 1.25rem;
+		color: var(--muted);
+		font-variant-numeric: tabular-nums;
+	}
+
+	.rows {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.sub {
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: var(--text-label);
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--muted);
+		margin: 1.75rem 0 0.4rem;
+	}
+
+	.more {
+		display: inline-block;
+		margin-top: 1.5rem;
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: var(--text-label);
+		font-weight: 700;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		text-decoration: none;
+	}
+
+	/* --- section 4, elsewhere --- */
+	.elsewhere {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1.5rem;
+	}
+
+	.elsewhere a {
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: var(--text-label);
+		letter-spacing: 0.08em;
+		text-decoration: none;
+	}
+
+	@media (max-width: 900px) {
+		.who {
+			grid-template-columns: minmax(0, 1fr);
+		}
+
+		.plate {
+			max-width: 240px;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.group {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.1rem;
+		}
+	}
+</style>
