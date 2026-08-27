@@ -12,13 +12,40 @@ const isActive = href === pathname || href === '/' + (subpath?.[0] || '');
 <a href={href} class:list={[className, { active: isActive }]} {...props}>
 	<slot />
 </a>
+
 <style>
+	/*
+	  The nav link owns its own appearance. Styling it from Header.astro would
+	  mean reaching past Astro's scoping with :global() and then out-specifying
+	  whatever this file said anyway — one owner is simpler than two fighting.
+	*/
 	a {
 		display: inline-block;
+		font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+		font-size: var(--text-label);
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
 		text-decoration: none;
+		color: var(--muted);
+		padding: 1.1em 0.75em;
+		border-bottom: 1px solid transparent;
+		transition: color 0.2s ease;
 	}
+
+	a:hover {
+		color: var(--ink);
+	}
+
+	/* A 1px rule, not a 4px bar. A bar is a tab; this is a paper. */
 	a.active {
-		font-weight: bolder;
-		text-decoration: underline;
+		color: var(--ink);
+		border-bottom-color: var(--accent);
+	}
+
+	@media (max-width: 720px) {
+		a {
+			padding-inline: 0.5em;
+		}
 	}
 </style>
