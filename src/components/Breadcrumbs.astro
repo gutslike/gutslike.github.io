@@ -116,7 +116,9 @@ const back = leaf
 	*/
 	.back {
 		display: inline-flex;
-		align-items: baseline;
+		/* The arrow is a symbol, not a letter — sitting it on the text baseline
+		   drops it below the cap height and it reads as falling off the row. */
+		align-items: center;
 		gap: 0.5em;
 		font-weight: 700;
 		text-decoration: none;

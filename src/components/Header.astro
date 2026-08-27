@@ -6,7 +6,10 @@ import HeaderLink from './HeaderLink.astro';
 
 <header>
 	<nav>
-		<a class="wordmark" href="/">{SITE_TITLE}</a>
+		<a class="wordmark" href="/">
+			<img src="/ms-favicon.svg" alt="" width="30" height="30" />
+			<span>{SITE_TITLE}</span>
+		</a>
 
 		<div class="internal-links">
 			<HeaderLink href="/">Home</HeaderLink>
@@ -50,6 +53,9 @@ import HeaderLink from './HeaderLink.astro';
 	}
 
 	.wordmark {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.7em;
 		font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
 		font-size: var(--text-label);
 		font-weight: 700;
@@ -57,7 +63,24 @@ import HeaderLink from './HeaderLink.astro';
 		text-transform: uppercase;
 		text-decoration: none;
 		color: var(--ink);
-		padding: 1.1em 0;
+		padding: 0.9em 0;
+	}
+
+	/*
+	  The monogram's own square is very close to the header ground, so what you
+	  actually see is the cream MS. The hairline gives it an edge so it reads as
+	  a mark rather than two letters floating loose.
+	*/
+	.wordmark img {
+		display: block;
+		border-radius: var(--radius);
+		border: 1px solid var(--line);
+	}
+
+	@media (max-width: 480px) {
+		.wordmark span {
+			display: none;
+		}
 	}
 
 	.internal-links {
