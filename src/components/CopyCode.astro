@@ -1,0 +1,51 @@
+---
+/**
+ * The only JavaScript on the site. It adds a copy button to each code figure.
+ *
+ * Everything else here renders without it — the language label, the table of
+ * contents and the code themes are all CSS — so if this fails to load the page
+ * is exactly as readable as before, just without the button.
+ */
+---
+
+<script>
+	const figures =
+		document.querySelectorAll<HTMLElement>('figure.code-block');
+
+	for (const figure of figures) {
+		const pre = figure.querySelector('pre');
+		if (!pre || !navigator.clipboard) continue;
+
+		const button = document.createElement('button');
+		button.type = 'button';
+		button.className = 'copy-code';
+		button.textContent = 'Copy';
+		button.setAttribute(
+			'aria-label',
+			`Copy ${figure.dataset.language ?? ''} code to clipboard`.replace(
+				/\s+/g,
+				' ',
+			),
+		);
+
+		let timer: ReturnType<typeof setTimeout>;
+
+		button.addEventListener('click', async () => {
+			clearTimeout(timer);
+			try {
+				await navigator.clipboard.writeText(pre.innerText);
+				button.textContent = 'Copied';
+				button.dataset.state = 'ok';
+			} catch {
+				button.textContent = "Couldn't copy";
+				button.dataset.state = 'error';
+			}
+			timer = setTimeout(() => {
+				button.textContent = 'Copy';
+				delete button.dataset.state;
+			}, 1800);
+		});
+
+		figure.appendChild(button);
+	}
+</script>

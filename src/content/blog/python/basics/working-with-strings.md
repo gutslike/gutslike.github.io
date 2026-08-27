@@ -1,7 +1,7 @@
 ---
 title: "Python Basics: Working with Strings"
 description: "A beginner-friendly guide to creating, formatting, and manipulating strings in Python."
-pubDate: "Jul 24 2026"
+pubDate: 2026-07-24
 ---
 
 Strings are one of the most common data types in Python. They are used to represent text, messages, filenames, and user input.

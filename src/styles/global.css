@@ -1,38 +1,126 @@
 /*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+  One token system.
+
+  Colours are declared here and nowhere else — components reference tokens, not
+  literals, so a theme change is a change to this file only. Every token is
+  defined three times:
+
+    :root                              the light palette
+    prefers-color-scheme: dark         the OS default, guarded so an explicit
+                                       light choice still wins
+    :root[data-theme="dark"]           an explicit choice, which beats the OS
+
+  The [data-theme] hooks are inert today — nothing sets the attribute — but they
+  mean a toggle is a few lines of script rather than a stylesheet rewrite.
+*/
 
 :root {
-  --dark-spruce: #2a4d14;
+  color-scheme: light;
+
+  /* Brand ramp. The identity; the same hues in both themes. */
+  --spruce: #2a4d14;
   --green: #317b22;
   --emerald: #67e0a3;
   --aquamarine: #7cf0bd;
-  --celadon: #aff9c9;
 
-  --bg: #f7fbf7;
-
+  /* Surfaces and text */
+  --ground: #f4f7f1;
   --surface: #ffffff;
+  --sunken: #e9efe4;
+  --ink: #14180f;
+  --muted: #5a6553;
+  --line: #dbe2d4;
 
-  --text: #1f2937;
+  /* Accent */
+  --accent: #2f5a1e;
+  --accent-hover: #3f7a28;
+  --on-accent: #ffffff;
 
-  --muted: #5f6b66;
+  /* Feature cards. Each gradient carries the text colour that reads on it —
+     that pairing is what stopped headings going near-black on dark spruce. */
+  --grad-1: linear-gradient(135deg, var(--spruce), var(--green));
+  --on-grad-1: #ffffff;
+  --grad-2: linear-gradient(135deg, var(--emerald), var(--aquamarine));
+  --on-grad-2: #10240a;
 
-  --border: rgba(42, 77, 20, 0.08);
+  --shadow-sm: 0 8px 25px rgba(20, 40, 12, 0.06);
+  --shadow: 0 10px 35px rgba(20, 40, 12, 0.09);
+  --shadow-lg: 0 20px 45px rgba(20, 40, 12, 0.14);
 
-  --shadow: 0 10px 35px rgba(42, 77, 20, 0.08);
-  --accent: #2337ff;
-  --accent-dark: #000d8a;
-  --black: 15, 18, 25;
-  --gray: 96, 115, 159;
-  --gray-light: 229, 233, 240;
-  --gray-dark: 34, 41, 57;
-  --gray-gradient: rgba(var(--gray-light), 50%), #fff;
-  --box-shadow:
-    0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-    0 16px 32px rgba(var(--gray), 33%);
+  /* Type scale, 1.25 ratio, anchored to the root so it doesn't drift with the
+     body size. h1 lands at 40px instead of the template's 61px. */
+  --text-sm: 0.85rem;
+  --text-h6: 1rem;
+  --text-h5: 1.1rem;
+  --text-h4: 1.28rem;
+  --text-h3: 1.6rem;
+  --text-h2: 2rem;
+  --text-h1: 2.5rem;
+
+  --radius: 24px;
+  --radius-lg: 28px;
+
+  /* Reading measure. `ch` tracks the font, so this stays ~68 characters
+     whatever the body size is set to. */
+  --measure: 68ch;
 }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+
+    --ground: #0e120c;
+    --surface: #171c14;
+    --sunken: #1f261b;
+    --ink: #e5eade;
+    --muted: #96a28b;
+    --line: #2b3327;
+
+    --accent: #8fd16e;
+    --accent-hover: #a6e086;
+    --on-accent: #0e120c;
+
+    --grad-1: linear-gradient(135deg, #1d3a10, #2c5c1d);
+    --on-grad-1: #eaf3e4;
+    --grad-2: linear-gradient(135deg, #144532, #1d6b4c);
+    --on-grad-2: #eafaf2;
+
+    --shadow-sm: 0 8px 25px rgba(0, 0, 0, 0.4);
+    --shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+    --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.55);
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --ground: #0e120c;
+  --surface: #171c14;
+  --sunken: #1f261b;
+  --ink: #e5eade;
+  --muted: #96a28b;
+  --line: #2b3327;
+
+  --accent: #8fd16e;
+  --accent-hover: #a6e086;
+  --on-accent: #0e120c;
+
+  --grad-1: linear-gradient(135deg, #1d3a10, #2c5c1d);
+  --on-grad-1: #eaf3e4;
+  --grad-2: linear-gradient(135deg, #144532, #1d6b4c);
+  --on-grad-2: #eafaf2;
+
+  --shadow-sm: 0 8px 25px rgba(0, 0, 0, 0.4);
+  --shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.55);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   font-family: var(--font-atkinson);
   margin: 0;
@@ -42,16 +130,29 @@ body {
   overflow-wrap: break-word;
   font-size: 20px;
   line-height: 1.7;
-  background: linear-gradient(180deg, #f7fbf7, #edf8f0);
-
-  color: var(--text);
+  background: var(--ground);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
 }
+
+/*
+  One width authority. `width: 720px` used to live here on the bare element,
+  which silently beat any `max-width` a page set on its own container — the
+  1100px blog grid rendered at 720. Pages now widen by overriding --main-max
+  on their own <main>, so there is only ever one declaration in play.
+*/
 main {
-  width: 720px;
-  max-width: calc(100% - 2em);
-  margin: auto;
+  width: 100%;
+  max-width: min(var(--main-max, var(--measure)), calc(100% - 2em));
+  margin-inline: auto;
   padding: 3em 1em;
 }
+
+/*
+  `color: inherit`, not a fixed ink. A heading inside a coloured card should
+  take that card's text colour; hardcoding it here is what rendered "Go"
+  near-black on the dark spruce gradient.
+*/
 h1,
 h2,
 h3,
@@ -59,83 +160,176 @@ h4,
 h5,
 h6 {
   margin: 0 0 0.5rem 0;
-  color: rgb(var(--black));
+  color: inherit;
   line-height: 1.2;
+  text-wrap: balance;
 }
+
 h1 {
-  font-size: 3.052em;
+  font-size: var(--text-h1);
 }
 h2 {
-  font-size: 2.441em;
+  font-size: var(--text-h2);
 }
 h3 {
-  font-size: 1.953em;
+  font-size: var(--text-h3);
 }
 h4 {
-  font-size: 1.563em;
+  font-size: var(--text-h4);
 }
 h5 {
-  font-size: 1.25em;
+  font-size: var(--text-h5);
 }
+h6 {
+  font-size: var(--text-h6);
+}
+
 strong,
 b {
   font-weight: 700;
 }
+
 a {
   color: var(--accent);
+  text-underline-offset: 2px;
 }
+
 a:hover {
-  color: var(--accent);
+  color: var(--accent-hover);
 }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 p {
   margin-bottom: 1em;
 }
+
 .prose p {
   margin-bottom: 2em;
 }
-textarea {
-  width: 100%;
-  font-size: 16px;
-}
+
+textarea,
 input {
   font-size: 16px;
 }
-table {
+
+textarea {
   width: 100%;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5em 0.75em;
+  border-bottom: 1px solid var(--line);
+}
+
 img {
   max-width: 100%;
   height: auto;
   border-radius: 8px;
 }
+
 code {
-  padding: 2px 5px;
-  background-color: rgb(var(--gray-light));
-  border-radius: 2px;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 0.875em;
+  padding: 0.15em 0.4em;
+  background-color: var(--sunken);
+  color: var(--ink);
+  border-radius: 4px;
 }
+
 pre {
-  padding: 1.5em;
-  border-radius: 8px;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  padding: 1.25em 1.5em;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  overflow-x: auto;
 }
+
 pre > code {
   all: unset;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
 }
+
+/*
+  Shiki emits both palettes as custom properties (defaultColor: false in
+  astro.config.mjs), so the theme is picked here rather than baked into the
+  markup at build time. Astro renames Shiki's `.shiki` class to `.astro-code`.
+*/
+.astro-code,
+.astro-code span {
+  color: var(--shiki-light);
+  background-color: var(--shiki-light-bg);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+  text-decoration: var(--shiki-light-text-decoration);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .astro-code,
+  :root:not([data-theme='light']) .astro-code span {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
+    font-style: var(--shiki-dark-font-style);
+    font-weight: var(--shiki-dark-font-weight);
+    text-decoration: var(--shiki-dark-text-decoration);
+  }
+}
+
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark);
+  background-color: var(--shiki-dark-bg);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+  text-decoration: var(--shiki-dark-text-decoration);
+}
+
 blockquote {
   border-left: 4px solid var(--accent);
   padding: 0 0 0 20px;
   margin: 0;
-  font-size: 1.333em;
+  font-size: 1.2em;
+  color: var(--muted);
 }
+
 hr {
   border: none;
-  border-top: 1px solid rgb(var(--gray-light));
+  border-top: 1px solid var(--line);
 }
+
 @media (max-width: 720px) {
   body {
     font-size: 18px;
   }
   main {
     padding: 1em;
+  }
+  :root {
+    --text-h1: 2rem;
+    --text-h2: 1.6rem;
+    --text-h3: 1.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -155,4 +349,91 @@ hr {
   clip-path: inset(50%);
   /* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
   white-space: nowrap;
+}
+
+/*
+  Code blocks. The <figure> wrapper comes from src/lib/rehype-code-figure.mjs
+  and holds the language label plus the copy button, so neither scrolls out of
+  view when a long line does.
+*/
+figure.code-block {
+  position: relative;
+  margin: 2em 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+figure.code-block .code-lang {
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0.5em 1em;
+  background: var(--sunken);
+  border-bottom: 1px solid var(--line);
+}
+
+figure.code-block pre {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+.copy-code {
+  position: absolute;
+  top: 0.25em;
+  right: 0.5em;
+  font: inherit;
+  font-size: 0.72rem;
+  line-height: 1;
+  padding: 0.45em 0.8em;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+  opacity: 0.7;
+  transition:
+    opacity 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+figure.code-block:hover .copy-code,
+.copy-code:focus-visible,
+.copy-code[data-state] {
+  opacity: 1;
+}
+
+.copy-code:hover,
+.copy-code[data-state='ok'] {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Anchor jumps from the table of contents shouldn't land flush to the top. */
+.prose :is(h2, h3, h4) {
+  scroll-margin-top: 1.5rem;
+}
+
+/*
+  Heading rhythm. The base rule sets no top margin, which is right for a card
+  or a page header but leaves body headings sitting flush against the
+  paragraph above them. Only the prose column needs the space.
+*/
+.prose :is(h2, h3, h4) {
+  margin-top: 2.75rem;
+}
+
+/* A subheading directly under its parent belongs closer to it than to the
+   section before. */
+.prose :is(h2, h3) + :is(h3, h4) {
+  margin-top: 1.25rem;
+}
+
+.prose > :first-child {
+  margin-top: 0;
 }

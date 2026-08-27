@@ -1,0 +1,68 @@
+---
+import type { MarkdownHeading } from 'astro';
+
+interface Props {
+	headings: MarkdownHeading[];
+}
+
+const { headings } = Astro.props;
+
+// h2 and h3 only. h1 is the post title, and h4+ is more detail than a rail
+// this size can carry.
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+	items.length >= 3 && (
+		<nav class="toc" aria-labelledby="toc-heading">
+			<h2 id="toc-heading">On this page</h2>
+			<ul>
+				{items.map((h) => (
+					<li class={h.depth === 3 ? 'sub' : undefined}>
+						<a href={`#${h.slug}`}>{h.text}</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+	)
+}
+
+<style>
+	.toc h2 {
+		font-size: var(--text-sm);
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--muted);
+		margin-bottom: 0.9rem;
+	}
+
+	.toc ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.45rem;
+		border-left: 1px solid var(--line);
+	}
+
+	.toc li {
+		padding-left: 0.9rem;
+	}
+
+	.toc li.sub {
+		padding-left: 1.9rem;
+	}
+
+	.toc a {
+		font-size: 0.8rem;
+		line-height: 1.4;
+		color: var(--muted);
+		text-decoration: none;
+		display: block;
+	}
+
+	.toc a:hover {
+		color: var(--accent);
+	}
+</style>

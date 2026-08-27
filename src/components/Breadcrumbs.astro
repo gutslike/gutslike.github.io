@@ -1,0 +1,61 @@
+---
+interface Props {
+	topic?: string | undefined;
+	series?: string | undefined;
+}
+
+const { topic, series } = Astro.props;
+
+const crumbs = [{ label: 'Blog', href: '/blog' }];
+
+if (topic) crumbs.push({ label: topic, href: `/blog/${topic}` });
+if (topic && series) {
+	crumbs.push({ label: series, href: `/blog/${topic}/${series}` });
+}
+---
+
+<nav class="crumbs" aria-label="Breadcrumb">
+	<ol>
+		{
+			crumbs.map((crumb, i) => (
+				<li>
+					{i > 0 && <span aria-hidden="true">/</span>}
+					<a href={crumb.href}>{crumb.label}</a>
+				</li>
+			))
+		}
+	</ol>
+</nav>
+
+<style>
+	.crumbs ol {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 0.5em;
+		font-size: var(--text-sm);
+	}
+
+	.crumbs li {
+		display: flex;
+		gap: 0.5em;
+		align-items: baseline;
+	}
+
+	.crumbs span {
+		color: var(--muted);
+	}
+
+	.crumbs a {
+		color: var(--muted);
+		text-decoration: none;
+	}
+
+	.crumbs a:hover {
+		color: var(--accent);
+		text-decoration: underline;
+	}
+</style>

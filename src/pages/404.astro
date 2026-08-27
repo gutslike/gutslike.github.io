@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+	title="Page not found"
+	description="That page does not exist — but the blog does."
+>
+	<main>
+		<p class="code">404</p>
+		<h1>This page doesn't exist.</h1>
+		<p>
+			The link may be out of date, or the address may have a typo in it.
+			Nothing here is lost — it just isn't at this URL.
+		</p>
+		<div class="actions">
+			<a class="primary" href="/blog">Browse the blog</a>
+			<a href="/">Go home</a>
+		</div>
+	</main>
+</Base>
+
+<style>
+	main {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1rem;
+		min-height: 55vh;
+		justify-content: center;
+	}
+	.code {
+		font-size: 0.85rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: var(--muted);
+		margin: 0;
+	}
+	h1 {
+		font-size: var(--text-h1);
+		margin: 0;
+	}
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		margin-top: 0.5rem;
+	}
+	.actions a {
+		text-decoration: none;
+		padding: 0.6em 1.2em;
+		border-radius: 999px;
+		border: 1px solid var(--line);
+		color: var(--accent);
+	}
+	.actions a.primary {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: var(--on-accent);
+	}
+	.actions a:hover {
+		border-color: var(--accent);
+		color: var(--accent-hover);
+	}
+</style>

@@ -1,7 +1,7 @@
 ---
 title: "Python Basics: Loops"
 description: "A concise introduction to for loops and while loops in Python."
-pubDate: "Jul 29 2026"
+pubDate: 2026-07-29
 ---
 
 Loops are used to repeat actions multiple times without writing the same code again.

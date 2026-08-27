@@ -1,7 +1,7 @@
 ---
 title: "Python Basics: Variables and Data Types"
 description: "A concise guide to Python variables, common data types, and truthiness."
-pubDate: "Jul 29 2026"
+pubDate: 2026-07-29
 ---
 
 Python variables are dynamically typed, which means their type can change during program execution. This makes Python flexible, but it is still important to understand the common data types you will use most often.

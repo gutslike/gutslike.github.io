@@ -1,173 +1,168 @@
 ---
-import BaseHead from '../../../components/BaseHead.astro';
-import Header from '../../../components/Header.astro';
-import Footer from '../../../components/Footer.astro';
-
-import { getCollection } from 'astro:content';
+import Base from '../../../layouts/Base.astro';
+import { byReadingOrder, getPosts, seriesOf, topicOf } from '../../../lib/posts';
 
 export async function getStaticPaths() {
+	const posts = await getPosts();
 
-	const posts = await getCollection('blog');
+	const topics = [
+		...new Set(posts.map(topicOf).filter((t): t is string => Boolean(t))),
+	];
 
-	const topics = [...new Set(
-		posts.map(p => p.id.split('/')[0])
-	)];
-
-	return topics.map(topic => ({
-		params:{ topic }
-	}));
+	return topics.map((topic) => ({ params: { topic } }));
 }
 
 const { topic } = Astro.params;
 
-const posts = await getCollection('blog');
+const inTopic = (await getPosts()).filter((post) => topicOf(post) === topic);
 
-const series = [...new Set(
+// Series run in curriculum order — earliest post first — so "basics" always
+// sits above "composite-types" rather than wherever the filesystem put it.
+const earliestBySeries = new Map<string, Date>();
 
-	posts
+for (const post of inTopic) {
+	const name = seriesOf(post);
+	if (!name) continue;
 
-	.filter(
-		p => p.id.startsWith(topic + "/")
-	)
+	const seen = earliestBySeries.get(name);
+	if (!seen || post.data.pubDate < seen) {
+		earliestBySeries.set(name, post.data.pubDate);
+	}
+}
 
-	.map(
-		p => p.id.split('/')[1]
-	)
+const series = [...earliestBySeries.entries()]
+	.sort((a, b) => a[1].valueOf() - b[1].valueOf())
+	.map(([name]) => name);
 
-)];
+// Posts that belong to the topic but to no series. These used to render as
+// one-post "series" cards reading "Explore posts inside this series."
+const standalone = inTopic.filter((post) => !seriesOf(post)).sort(byReadingOrder);
 ---
 
-<html>
-
-<head>
-
-<BaseHead
-	title={topic}
-	description="Series"
-/>
-
-</head>
-
-<body>
-
-<Header />
-
-<main class="container">
-
-	<div class="hero">
-
-		<h1>
-			{topic}
-		</h1>
-
-		<p>
-			Series and structured learning paths.
-		</p>
-
-	</div>
-
-	<div class="grid">
+<Base title={topic} description={`Posts and series in ${topic}`}>
+	<main>
+		<div class="hero">
+			<h1>{topic}</h1>
+			<p>Series and structured learning paths.</p>
+		</div>
 
 		{
-			series.map(item => (
-
-				<a
-					class="card"
-					href={`/blog/${topic}/${item}`}
-				>
-
-					<h2>
-						{item}
-					</h2>
-
-					<p>
-
-						Explore posts
-						inside this series.
-
-					</p>
-
-				</a>
-
-			))
+			series.length > 0 && (
+				<div class="grid">
+					{series.map((item) => (
+						<a class="card" href={`/blog/${topic}/${item}`}>
+							<h2>{item}</h2>
+							<p>Explore posts inside this series.</p>
+						</a>
+					))}
+				</div>
+			)
 		}
 
-	</div>
+		{
+			standalone.length > 0 && (
+				<section class="standalone">
+					{series.length > 0 && <h2 class="section-title">Other posts</h2>}
+					<ul class="post-list">
+						{standalone.map((post) => (
+							<li>
+								<a class="post-card" href={`/blog/${post.id}/`}>
+									<h3>{post.data.title}</h3>
+									<p>{post.data.description}</p>
+								</a>
+							</li>
+						))}
+					</ul>
+				</section>
+			)
+		}
+	</main>
+</Base>
 
-</main>
-
-<Footer />
-
-</body>
-
-</html>
 <style>
+	main {
+		--main-max: 1100px;
+		padding: 3rem 1.5rem;
+	}
 
-.container{
+	.hero {
+		text-align: center;
+		margin-bottom: 4rem;
+	}
 
-	max-width:1100px;
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+		gap: 2rem;
+	}
 
-	margin:auto;
+	.card {
+		padding: 2rem;
+		border-radius: 28px;
+		background: var(--surface);
+		border: 1px solid var(--line);
+		box-shadow: var(--shadow-sm);
+		text-decoration: none;
+		color: var(--ink);
+		transition: 0.25s;
+	}
 
-	padding:3rem 1.5rem;
+	.card:hover {
+		transform: translateY(-6px);
+	}
 
-}
+	.standalone {
+		margin-top: 3.5rem;
+	}
 
-.hero{
+	.section-title {
+		font-size: var(--text-h3);
+		margin-bottom: 1.5rem;
+	}
 
-	text-align:center;
+	.post-list {
+		list-style: none;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
 
-	margin-bottom:4rem;
+	.post-card {
+		display: block;
+		padding: 1.75rem 2rem;
+		border-radius: 24px;
+		text-decoration: none;
+		background: var(--surface);
+		border: 1px solid var(--line);
+		box-shadow: var(--shadow-sm);
+		color: var(--ink);
+		transition: 0.2s;
+	}
 
-}
+	.post-card:hover {
+		transform: translateY(-4px);
+	}
 
-.grid{
+	.post-card h3 {
+		margin-top: 0;
+		font-size: var(--text-h4);
+	}
 
-	display:grid;
+	.post-card p {
+		margin-bottom: 0;
+		color: var(--muted);
+	}
 
-	grid-template-columns:
+	@media (prefers-reduced-motion: reduce) {
+		.card,
+		.post-card {
+			transition: none;
+		}
 
-	repeat(
-		auto-fit,
-		minmax(320px,1fr)
-	);
-
-	gap:2rem;
-
-}
-
-.card{
-
-	padding:2rem;
-
-	border-radius:28px;
-
-	background:white;
-
-	border:
-
-	1px solid
-	rgba(0,0,0,.08);
-
-	box-shadow:
-
-	0 10px 30px
-	rgba(0,0,0,.06);
-
-	text-decoration:none;
-
-	color:inherit;
-
-	transition:.25s;
-
-}
-
-.card:hover{
-
-	transform:
-
-	translateY(-6px);
-
-}
-
+		.card:hover,
+		.post-card:hover {
+			transform: none;
+		}
+	}
 </style>

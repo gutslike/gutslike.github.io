@@ -1,195 +1,110 @@
 ---
-import BaseHead from '../../../../components/BaseHead.astro';
-import Header from '../../../../components/Header.astro';
-import Footer from '../../../../components/Footer.astro';
+import Base from '../../../../layouts/Base.astro';
+import {
+	byReadingOrder,
+	getPosts,
+	seriesOf,
+	topicOf,
+} from '../../../../lib/posts';
 
-import { getCollection } from 'astro:content';
+export async function getStaticPaths() {
+	const posts = await getPosts();
 
-export async function getStaticPaths(){
+	// One entry per series, not per post. Returning a duplicate for every post
+	// made Astro emit a route-conflict warning for each redundant one.
+	const seen = new Set<string>();
+	const paths = [];
 
-	const posts = await getCollection('blog');
+	for (const post of posts) {
+		const topic = topicOf(post);
+		const series = seriesOf(post);
 
-	const validPosts = posts.filter(post => {
+		if (!topic || !series) continue;
 
-		const parts = post.id.split('/');
+		const key = `${topic}/${series}`;
+		if (seen.has(key)) continue;
 
-		return parts.length >= 3;
+		seen.add(key);
+		paths.push({ params: { topic, series } });
+	}
 
-	});
-
-	return validPosts.map(post => {
-
-		const parts = post.id.split('/');
-
-		return {
-
-			params: {
-
-				topic: parts[0],
-
-				series: parts[1]
-
-			}
-
-		};
-
-	});
-
+	return paths;
 }
 
-const { topic, series } =
-	Astro.params;
+const { topic, series } = Astro.params;
 
-const posts =
-(await getCollection('blog'))
-
-.filter(post=>{
-
-	const parts =
-	post.id.split('/');
-
-	return (
-
-		parts[0]===topic &&
-
-		parts[1]===series
-
-	);
-
-});
+// A series is a reading order, so oldest first — not newest first like the feed.
+const posts = (await getPosts())
+	.filter((post) => topicOf(post) === topic && seriesOf(post) === series)
+	.sort(byReadingOrder);
 ---
 
-<html>
+<Base title={series} description={`Posts in the ${series} series`}>
+	<main>
+		<h1>{series}</h1>
 
-<head>
+		<ul class="post-list">
+			{
+				posts.map((post) => (
+					<li>
+						<a class="post-card" href={`/blog/${post.id}/`}>
+							<h3>{post.data.title}</h3>
+							<p>{post.data.description}</p>
+						</a>
+					</li>
+				))
+			}
+		</ul>
+	</main>
+</Base>
 
-<BaseHead
-	title={series}
-	description="Posts"
-/>
+<style>
+	main {
+		--main-max: 900px;
+		padding: 3rem 1.5rem;
+	}
 
-</head>
+	.post-list {
+		list-style: none;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
 
-<body>
+	.post-card {
+		display: block;
+		padding: 2rem;
+		border-radius: 24px;
+		text-decoration: none;
+		background: var(--surface);
+		border: 1px solid var(--line);
+		box-shadow: var(--shadow-sm);
+		color: var(--ink);
+		transition: 0.2s;
+	}
 
-<Header />
+	.post-card:hover {
+		transform: translateY(-4px);
+	}
 
-<main class="container">
+	.post-card h3 {
+		margin-top: 0;
+		font-size: var(--text-h4);
+	}
 
-	<h1>
-		{series}
-	</h1>
+	.post-card p {
+		margin-bottom: 0;
+		color: var(--muted);
+	}
 
-	<ul class="post-list">
-
-		{
-
-			posts.map(post => (
-
-				<li>
-
-					<a
-					class="post-card"
-					href={`/blog/${post.id.replace(".md","")}/`}
-					>
-
-						<h3>
-
-							{post.data.title}
-
-						</h3>
-
-						<p>
-
-							{
-								post.data.description
-							}
-
-						</p>
-
-					</a>
-
-				</li>
-
-			))
-
+	@media (prefers-reduced-motion: reduce) {
+		.post-card {
+			transition: none;
 		}
 
-	</ul>
-
-</main>
-
-<Footer />
-
-</body>
-
-</html>
-<style>
-
-.container{
-
-	max-width:900px;
-
-	margin:auto;
-
-	padding:3rem 1.5rem;
-
-}
-
-.post-list{
-
-	list-style:none;
-
-	padding:0;
-
-	display:flex;
-
-	flex-direction:column;
-
-	gap:1.5rem;
-
-}
-
-.post-card{
-
-	display:block;
-
-	padding:2rem;
-
-	border-radius:24px;
-
-	text-decoration:none;
-
-	background:white;
-
-	border:
-
-	1px solid
-	rgba(0,0,0,.08);
-
-	box-shadow:
-
-	0 8px 25px
-	rgba(0,0,0,.05);
-
-	color:inherit;
-
-	transition:.2s;
-
-}
-
-.post-card:hover{
-
-	transform:
-
-	translateY(-4px);
-
-}
-
-.post-card h3{
-
-	margin-top:0;
-
-}
-
+		.post-card:hover {
+			transform: none;
+		}
+	}
 </style>

@@ -1,7 +1,7 @@
 ---
 title: "Python Basics: Lists, Tuples, Sets, and Dictionaries"
 description: "A concise guide to Python's core collection types and when to use each."
-pubDate: "Jul 29 2026"
+pubDate: 2026-07-29
 ---
 
 Python provides several built-in data structures for storing groups of values. Each one has a different purpose.

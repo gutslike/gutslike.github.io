@@ -1,21 +1,9 @@
 ---
-
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
+import Base from '../layouts/Base.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 ---
 
-<!doctype html>
-
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-
-<body>
-	<Header />
-
+<Base title={SITE_TITLE} description={SITE_DESCRIPTION}>
 	<main>
 		<section class="hero">
 			<h1>Hi, I'm Manubhav Sharma</h1>
@@ -103,9 +91,4 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 			</p>
 		</section>
 	</main>
-
-	<Footer />
-</body>
-```
-
-</html>
+</Base>

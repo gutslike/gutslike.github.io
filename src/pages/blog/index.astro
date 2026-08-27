@@ -1,355 +1,181 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import { getPosts, topicOf } from '../../lib/posts';
 
-const posts = await getCollection('blog');
+const posts = await getPosts();
 
-const topicInfo: Record<
-	string,
-	{
-		description: string;
-	}
-> = {
-
+const topicInfo: Record<string, { description: string }> = {
 	devops: {
 		description:
-			"Cloud, Linux, infrastructure, deployment workflows, and platform engineering.",
+			'Cloud, Linux, infrastructure, deployment workflows, and platform engineering.',
 	},
-
 	leetcode: {
 		description:
-			"Algorithms, problem solving patterns, data structures, and coding notes.",
+			'Algorithms, problem solving patterns, data structures, and coding notes.',
 	},
-
 	ai: {
 		description:
-			"Machine learning, neural networks, experiments, and AI concepts.",
-	}
-
+			'Machine learning, neural networks, experiments, and AI concepts.',
+	},
 };
 
-const topics = [...new Set(
-	posts.map(post => post.id.split('/')[0])
-)];
+// Most recently active topic first, so /blog/ leads with what's being written
+// now. Previously this was incidental file order, which is alphabetical.
+const latestByTopic = new Map<string, Date>();
+
+for (const post of posts) {
+	const topic = topicOf(post);
+	if (!topic) continue;
+
+	const seen = latestByTopic.get(topic);
+	if (!seen || post.data.pubDate > seen) {
+		latestByTopic.set(topic, post.data.pubDate);
+	}
+}
+
+const topics = [...latestByTopic.entries()]
+	.sort((a, b) => b[1].valueOf() - a[1].valueOf())
+	.map(([topic]) => topic);
 ---
 
-<html>
+<Base title="Blog" description="Topics">
+	<main>
+		<div class="hero">
+			<h1>Topics</h1>
+			<p>Browse concepts, projects, notes, and learning paths.</p>
+		</div>
 
-<head>
-	<BaseHead title="Blog" description="Topics" />
-</head>
-
-<body>
-
-<Header />
-
-<main class="container">
-
-	<div class="hero">
-
-		<h1>Topics</h1>
-
-		<p>
-			Browse concepts, projects, notes, and learning paths.
-		</p>
-
-	</div>
-
-	<div class="grid">
-
-		{
-			topics.map(topic => (
-
-				<a
-					class="card"
-					href={`/blog/${topic}`}
-				>
-
-					<div class="card-content">
-
-	<h2>
-
-		{
-			topic.charAt(0).toUpperCase()
-			+
-			topic.slice(1)
-		}
-
-	</h2>
-
-	<p>
-
-		{
-			topicInfo[topic]?.description
-			||
-			"Explore notes, series, and learnings."
-		}
-
-	</p>
-
-</div>
-
-				</a>
-
-			))
-		}
-
-	</div>
-
-</main>
-
-<Footer />
-
-</body>
-
-</html>
+		<div class="grid">
+			{
+				topics.map((topic) => (
+					<a class="card" href={`/blog/${topic}`}>
+						<div class="card-content">
+							<h2>{topic.charAt(0).toUpperCase() + topic.slice(1)}</h2>
+							<p>
+								{topicInfo[topic]?.description ||
+									'Explore notes, series, and learnings.'}
+							</p>
+						</div>
+					</a>
+				))
+			}
+		</div>
+	</main>
+</Base>
 
 <style>
-body{
-	background-color: crimson;
-	min-height:100%;
-	margin:0;
-}
-.container{
-
-	max-width:1100px;
-
-	margin:auto;
-
-	padding:
-	3rem
-	1.5rem
-	6rem;
-
-	min-height:80vh;
-
-}
-
-.hero{
-
-	text-align:center;
-
-	margin-bottom:4rem;
-
-}
-
-.hero h1{
-
-	margin-bottom:.75rem;
-
-	font-size:3rem;
-
-}
-
-.hero p{
-
-	color:rgb(var(--gray));
-
-	font-size:1.05rem;
-
-	max-width:650px;
-
-	margin:auto;
-
-	line-height:1.7;
-
-}
-
-.grid{
-
-	display:grid;
-
-	grid-template-columns:
-
-	repeat(
-		12,
-		1fr
-	);
-
-	gap:1.5rem;
-
-	max-width:1200px;
-
-	margin:auto;
-
-}
-
-.card{
-
-	position:relative;
-
-	padding:2.5rem;
-
-	border-radius:28px;
-
-	text-decoration:none;
-
-	background:
-
-	linear-gradient(
-
-		145deg,
-
-		rgba(255,255,255,.95),
-
-		rgba(255,255,255,.75)
-
-	);
-
-	backdrop-filter:
-	blur(12px);
-
-	border:
-
-	1px solid
-	var(--border);
-
-	box-shadow:
-	var(--shadow);
-
-	overflow:hidden;
-
-	min-height:220px;
-
-	display:flex;
-
-	flex-direction:column;
-
-	justify-content:space-between;
-
-	transition:
-
-	transform .25s ease,
-
-	box-shadow .25s ease;
-
-}
-
-.card:hover{
-
-	transform:
-
-	translateY(-8px);
-
-	box-shadow:
-
-	0 20px 45px
-	rgba(42,77,20,.14);
-
-}
-
-.card-content{
-
-	max-width:70%;
-
-}
-
-.card h2{
-
-	font-size:2rem;
-
-	margin:0;
-
-	font-weight:700;
-
-}
-
-.card p{
-
-	line-height:1.7;
-
-	color:inherit;
-
-	opacity:.8;
-
-}
-
-
-.card:hover .arrow{
-
-	transform:translateX(8px);
-
-	opacity:1;
-
-}
-
-.card:nth-child(1){
-
-	grid-column:
-	span 8;
-
-	background:
-
-	linear-gradient(
-		135deg,
-
-		var(--dark-spruce),
-
-		var(--green)
-	);
-
-	color:white;
-
-}
-
-.card:nth-child(2){
-
-	grid-column:
-	span 4;
-
-}
-
-.card:nth-child(3){
-
-	grid-column:
-	span 5;
-
-}
-
-.card:nth-child(4){
-
-	grid-column:
-	span 7;
-
-	background:
-
-	linear-gradient(
-
-		135deg,
-
-		var(--emerald),
-
-		var(--aquamarine)
-
-	);
-
-}
-
-.card:nth-child(n+5){
-
-	grid-column:
-	span 6;
-
-}
-@media(max-width:900px){
-
-	.grid{
-
-		grid-template-columns:
-		1fr;
-
+	main {
+		--main-max: 1100px;
+		padding: 3rem 1.5rem 6rem;
+		min-height: 80vh;
 	}
 
-	.card{
-
-		grid-column:
-		span 1 !important;
-
-		min-height:180px;
-
+	.hero {
+		text-align: center;
+		margin-bottom: 4rem;
 	}
 
-}
+	.hero h1 {
+		margin-bottom: 0.75rem;
+		font-size: var(--text-h1);
+	}
+
+	.hero p {
+		color: var(--muted);
+		font-size: 1.05rem;
+		max-width: 650px;
+		margin: auto;
+		line-height: 1.7;
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(12, 1fr);
+		gap: 1.5rem;
+	}
+
+	.card {
+		position: relative;
+		padding: 2.5rem;
+		border-radius: 28px;
+		text-decoration: none;
+		background: var(--surface);
+		color: var(--ink);
+		border: 1px solid var(--line);
+		box-shadow: var(--shadow);
+		overflow: hidden;
+		min-height: 220px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		transition:
+			transform 0.25s ease,
+			box-shadow 0.25s ease;
+	}
+
+	.card:hover {
+		transform: translateY(-8px);
+		box-shadow: var(--shadow-lg);
+	}
+
+	.card-content {
+		max-width: 70%;
+	}
+
+	.card h2 {
+		font-size: var(--text-h2);
+		margin: 0;
+		font-weight: 700;
+	}
+
+	.card p {
+		line-height: 1.7;
+		color: inherit;
+		opacity: 0.8;
+	}
+
+	.card:nth-child(1) {
+		grid-column: span 8;
+		background: var(--grad-1);
+		color: var(--on-grad-1);
+	}
+
+	.card:nth-child(2) {
+		grid-column: span 4;
+	}
+
+	.card:nth-child(3) {
+		grid-column: span 5;
+	}
+
+	.card:nth-child(4) {
+		grid-column: span 7;
+		background: var(--grad-2);
+		color: var(--on-grad-2);
+	}
+
+	.card:nth-child(n + 5) {
+		grid-column: span 6;
+	}
+
+	@media (max-width: 900px) {
+		.grid {
+			grid-template-columns: 1fr;
+		}
+
+		.card {
+			grid-column: span 1 !important;
+			min-height: 180px;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.card {
+			transition: none;
+		}
+
+		.card:hover {
+			transform: none;
+		}
+	}
 </style>

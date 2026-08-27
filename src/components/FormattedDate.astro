@@ -6,12 +6,16 @@ interface Props {
 const { date } = Astro.props;
 ---
 
-<time datetime={date.toISOString()}>
+<time datetime={date.toISOString().slice(0, 10)}>
 	{
 		date.toLocaleDateString('en-us', {
 			year: 'numeric',
 			month: 'short',
 			day: 'numeric',
+			// pubDate is a calendar date stored as UTC midnight. Without this the
+			// formatter uses the build machine's zone and renders the day before
+			// on any runner west of UTC.
+			timeZone: 'UTC',
 		})
 	}
 </time>

@@ -1,7 +1,7 @@
 ---
 title: "Python Basics: Conditionals"
 description: "A concise overview of if, elif, else, and match-case statements in Python."
-pubDate: "Jul 29 2026"
+pubDate: 2026-07-29
 ---
 
 Conditional statements let your program make decisions. In Python, the most common form is the if-elif-else structure.
