@@ -2,7 +2,6 @@
 title: "Variables and Constants"
 description: "A beginner-friendly guide to variables, constants, scope, zero values, and best practices in Go."
 pubDate: 2026-08-05
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Variables are used to store values that can change during the program. Constants are used for values that should stay fixed.

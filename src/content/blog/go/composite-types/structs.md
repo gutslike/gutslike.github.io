@@ -2,7 +2,6 @@
 title: "Structs in Go"
 description: "A comprehensive guide to structs in Go, including field access, struct tags, JSON marshaling, and embedding for composition."
 pubDate: 2026-08-12
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Structs are composite data types that group variables of different types together. A struct is Go's way of implementing objects and records.

@@ -2,7 +2,6 @@
 title: "Go Documentation: Tools and Best Practices"
 description: "A comprehensive guide to Go documentation tools including go doc, godoc, documentation comments, and best practices for writing effective documentation."
 pubDate: 2026-08-07
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Go takes documentation seriously. The language provides built-in tools to generate, view, and share documentation directly from your code. Good documentation is essential for making your code understandable and maintainable.

@@ -2,7 +2,6 @@
 title: "Arrays in Go"
 description: "A comprehensive guide to arrays in Go, including declaration, initialization, iteration, and practical examples."
 pubDate: 2026-08-08
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Arrays are a fundamental data structure in Go. An array is a fixed-size collection of elements of the same type.

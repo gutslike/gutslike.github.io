@@ -2,7 +2,6 @@
 title: "Strings in Go"
 description: "A comprehensive guide to working with strings in Go, including runes, encoding, manipulation, and common string operations."
 pubDate: 2026-08-10
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Strings are one of the most commonly used data types in Go. A string is an immutable sequence of bytes that represents text.

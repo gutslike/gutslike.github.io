@@ -2,7 +2,6 @@
 title: "Maps in Go"
 description: "A comprehensive guide to maps in Go, including declaration, manipulation, iteration, and the comma-ok idiom for safe map access."
 pubDate: 2026-08-11
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Maps are unordered collections of key-value pairs. A map is Go's way of implementing hash tables or dictionaries.

@@ -2,7 +2,6 @@
 title: "Slices in Go"
 description: "A comprehensive guide to slices in Go, covering declaration, capacity, growth, make(), and conversions between slices and arrays."
 pubDate: 2026-08-09
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Slices are one of the most important data structures in Go. A slice is a dynamic view into an array, providing a flexible, powerful way to work with sequences of elements.

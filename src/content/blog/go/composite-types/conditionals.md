@@ -2,7 +2,6 @@
 title: "Conditionals in Go"
 description: "A comprehensive guide to conditionals in Go, including if statements, if-else chains, and switch statements."
 pubDate: 2026-08-13
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Conditionals allow your program to make decisions and execute different code based on conditions.

@@ -2,7 +2,6 @@
 title: "Data Types in Go"
 description: "A concise guide to integers, floating-point numbers, complex numbers, booleans, runes, strings, and type conversions in Go."
 pubDate: 2026-08-06
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Go is a statically typed language, which means every variable has a type and that type is checked at compile time. Understanding Go's built-in data types is essential because they control how values are stored, compared, and converted.

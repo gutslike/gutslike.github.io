@@ -2,7 +2,6 @@
 title: "Functions in Go"
 description: "A comprehensive guide to functions in Go, including basics, variadic functions, multiple returns, anonymous functions, closures, and call by value semantics."
 pubDate: 2026-08-15
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Functions are reusable blocks of code that perform a specific task. Functions are central to writing organized, maintainable Go code.

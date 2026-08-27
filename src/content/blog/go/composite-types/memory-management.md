@@ -2,7 +2,6 @@
 title: "Memory Management and Garbage Collection in Go"
 description: "A comprehensive guide to memory management and garbage collection in Go, including how the GC works, escape analysis, and best practices."
 pubDate: 2026-08-17
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Memory management is a critical aspect of writing efficient programs. Go simplifies memory management by providing automatic garbage collection, freeing developers from manual memory allocation and deallocation.

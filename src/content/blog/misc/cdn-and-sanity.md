@@ -2,7 +2,6 @@
 title: "CDNs and Sanity.io"
 description: "What a CDN actually does, and how Sanity.io solved image hosting and delivery for a project of mine."
 pubDate: 2022-07-08
-heroImage: "../../../assets/blog-placeholder-3.jpg"
 ---
 
 Todays blog covers how i got familiar with cdn.

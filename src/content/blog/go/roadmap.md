@@ -2,7 +2,6 @@
 title: "Learning Go: My 3-Phase Plan"
 description: "A simple and practical roadmap for learning Go by getting the basics, building something small, and then studying the language in depth."
 pubDate: 2026-07-30
-heroImage: "../../../assets/blog-placeholder-1.jpg"
 ---
 
 # Learning Go: My 3-Phase Plan

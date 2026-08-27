@@ -2,7 +2,6 @@
 title: "Loops in Go"
 description: "A comprehensive guide to loops in Go, including for loops, range iteration, break, continue, and goto (discouraged)."
 pubDate: 2026-08-14
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Loops allow you to repeat a block of code multiple times. Go provides the `for` loop as its primary looping mechanism, with several variations to suit different needs.

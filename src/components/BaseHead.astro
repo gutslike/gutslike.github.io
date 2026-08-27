@@ -3,7 +3,11 @@
 // all pages through the use of the <BaseHead /> component.
 import '../styles/global.css';
 import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/blog-placeholder-1.jpg';
+// The site-wide link preview. This used to be blog-placeholder-1.jpg, which is
+// Astro's own promotional artwork — every shared link to this site carried
+// someone else's logo and slogan. A purpose-built 1200x630 card would be better
+// still; a portrait photo gets centre-cropped by most platforms.
+import FallbackImage from '../assets/photo.jpg';
 import { SITE_TITLE } from '../consts';
 import { Font } from 'astro:assets';
 

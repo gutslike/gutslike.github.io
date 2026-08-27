@@ -2,7 +2,6 @@
 title: "Pointers in Go"
 description: "A comprehensive guide to pointers in Go, including basics, operations with structs, maps, slices, and practical applications."
 pubDate: 2026-08-16
-heroImage: "../../../../assets/blog-placeholder-1.jpg"
 ---
 
 Pointers are variables that store memory addresses. Understanding pointers is essential for writing efficient Go code and modifying values in functions.
