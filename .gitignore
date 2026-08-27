@@ -25,3 +25,5 @@ pnpm-debug.log*
 
 
 ideas.txt
+# Playwright MCP scratch snapshots
+.playwright-mcp/
