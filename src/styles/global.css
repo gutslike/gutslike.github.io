@@ -122,7 +122,7 @@
 }
 
 body {
-  font-family: var(--font-atkinson);
+  font-family: var(--font-serif, Georgia, Cambria, 'Times New Roman', serif);
   margin: 0;
   padding: 0;
   text-align: left;
@@ -159,6 +159,9 @@ h3,
 h4,
 h5,
 h6 {
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+  font-weight: 700;
+  letter-spacing: -0.02em;
   margin: 0 0 0.5rem 0;
   color: inherit;
   line-height: 1.2;

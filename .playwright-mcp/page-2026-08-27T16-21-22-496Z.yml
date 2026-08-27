@@ -1,0 +1,64 @@
+- generic [active] [ref=f4e1]:
+  - banner [ref=f4e2]:
+    - navigation [ref=f4e3]:
+      - heading [level=2] [ref=f4e4]:
+        - link "Manubhav's blogs" [ref=f4e5] [cursor=pointer]:
+          - /url: /
+      - generic [ref=f4e6]:
+        - link "Home" [ref=f4e7] [cursor=pointer]:
+          - /url: /
+        - link "Blog" [ref=f4e8] [cursor=pointer]:
+          - /url: /blog
+        - link "About" [ref=f4e9] [cursor=pointer]:
+          - /url: /about
+      - link "Manubhav Sharma on GitHub" [ref=f4e11] [cursor=pointer]:
+        - /url: https://github.com/gutslike
+  - main [ref=f4e15]:
+    - article [ref=f4e16]:
+      - generic [ref=f4e18]:
+        - navigation "Breadcrumb" [ref=f4e19]:
+          - list [ref=f4e20]:
+            - listitem [ref=f4e21]:
+              - link "Blog" [ref=f4e22] [cursor=pointer]:
+                - /url: /blog
+        - heading "About Me" [level=1] [ref=f4e23]
+        - paragraph [ref=f4e24]:
+          - time [ref=f4e25]: Aug 7, 2021
+      - generic [ref=f4e27]:
+        - generic [ref=f4e28]:
+          - paragraph [ref=f4e29]: Hey, I’m Manubhav Sharma — a Computer Science (AI) student, builder, and someone who enjoys figuring out how things work under the hood.
+          - paragraph [ref=f4e30]: I enjoy building projects that sit at the intersection of artificial intelligence, software engineering, and practical problem solving.
+        - generic [ref=f4e31]:
+          - heading "My Journey Into Tech" [level=2] [ref=f4e32]
+          - paragraph [ref=f4e33]: What started as curiosity slowly turned into an obsession with building things. Over time, that curiosity evolved into working on AI systems, full-stack applications, mobile apps, testing workflows, and experimenting with different technologies.
+          - paragraph [ref=f4e34]: I enjoy learning by building — which means most concepts I learn eventually become projects, notes, experiments, or blog posts.
+        - generic [ref=f4e35]:
+          - heading "Things I Like Working On" [level=2] [ref=f4e36]
+          - list [ref=f4e37]:
+            - listitem [ref=f4e38]: Artificial Intelligence & Deep Learning
+            - listitem [ref=f4e39]: System Design & Architecture
+            - listitem [ref=f4e40]: Full Stack Development
+            - listitem [ref=f4e41]: Developer Productivity Systems
+            - listitem [ref=f4e42]: Performance Optimization
+            - listitem [ref=f4e43]: Problem Solving & Algorithms
+        - generic [ref=f4e44]:
+          - heading "Projects & Experiments" [level=2] [ref=f4e45]
+          - paragraph [ref=f4e46]: I enjoy building projects that solve practical problems and teach me something new in the process.
+          - list [ref=f4e47]:
+            - listitem [ref=f4e48]: AI-powered FIR Classification System
+            - listitem [ref=f4e49]: Collaborative Team Management Platform
+            - listitem [ref=f4e50]: Bluetooth Data Streaming Application
+            - listitem [ref=f4e51]: Expense Tracking Platform
+            - listitem [ref=f4e52]: Various experiments in AI and automation
+        - generic [ref=f4e53]:
+          - heading "Why I Write" [level=2] [ref=f4e54]
+          - paragraph [ref=f4e55]: This blog exists because writing helps me think better.
+          - paragraph [ref=f4e56]: Here, I document concepts, mistakes, debugging sessions, project decisions, and things I wish someone had explained to me earlier.
+          - paragraph [ref=f4e57]: If you're also learning, building, or experimenting — hopefully something here helps.
+        - generic [ref=f4e58]:
+          - heading "Beyond Code" [level=2] [ref=f4e59]
+          - paragraph [ref=f4e60]: Apart from coding, I enjoy problem solving, logic building, competitive challenges, and exploring how technology can make systems more efficient.
+  - contentinfo [ref=f4e61]:
+    - text: © 2026 Manubhav Sharma. All rights reserved.
+    - link "Manubhav Sharma on GitHub" [ref=f4e63] [cursor=pointer]:
+      - /url: https://github.com/gutslike

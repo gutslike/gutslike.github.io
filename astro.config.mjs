@@ -27,26 +27,17 @@ export default defineConfig({
   },
   fonts: [
     {
-      provider: fontProviders.local(),
-      name: "Atkinson",
-      cssVariable: "--font-atkinson",
-      fallbacks: ["sans-serif"],
-      options: {
-        variants: [
-          {
-            src: ["./src/assets/fonts/atkinson-regular.woff"],
-            weight: 400,
-            style: "normal",
-            display: "swap",
-          },
-          {
-            src: ["./src/assets/fonts/atkinson-bold.woff"],
-            weight: 700,
-            style: "normal",
-            display: "swap",
-          },
-        ],
-      },
+      // Body text. Astro downloads and self-hosts this, so there is no runtime
+      // request to Google. Source Serif 4 ships a true italic — Atkinson, which
+      // this replaces, had no italic file in the repo, so every <em> on the site
+      // was a browser-synthesised oblique.
+      provider: fontProviders.google(),
+      name: "Source Serif 4",
+      cssVariable: "--font-serif",
+      weights: [400, 600],
+      styles: ["normal", "italic"],
+      subsets: ["latin"],
+      fallbacks: ["Georgia", "Cambria", "Times New Roman", "serif"],
     },
     {
       // Code is the primary content here — 360+ fenced blocks. Without this
