@@ -1,0 +1,92 @@
+---
+/**
+ * One row with a dotted leader running between its two sides, the way a table
+ * of contents carries the eye from a chapter name to its page number.
+ *
+ * Renders as a link when given an href and as a plain row otherwise, so a
+ * project with no repo URL yet simply has no action rather than a dead one.
+ */
+interface Props {
+	href?: string | undefined;
+}
+
+const { href } = Astro.props;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag class="leader-row" {...href ? { href } : {}}>
+	<span class="left"><slot /></span>
+	<i class="dots" aria-hidden="true"></i>
+	<span class="right"><slot name="right" /></span>
+</Tag>
+
+<style>
+	.leader-row {
+		display: flex;
+		align-items: baseline;
+		gap: 0.6rem;
+		padding: 0.55rem 0;
+		border-bottom: 1px dotted var(--line);
+		text-decoration: none;
+		color: var(--ink);
+	}
+
+	.leader-row:last-child {
+		border-bottom: none;
+	}
+
+	a.leader-row {
+		transition: color 0.2s ease;
+	}
+
+	a.leader-row:hover {
+		color: var(--accent);
+	}
+
+	.left {
+		font-weight: 600;
+	}
+
+	/*
+	  The leader itself. It flexes to fill whatever gap is left, and is nudged
+	  up so it sits on the baseline rather than the bottom of the line box.
+	*/
+	.dots {
+		flex: 1;
+		border-bottom: 1px dotted var(--line);
+		transform: translateY(-0.22em);
+		min-width: 1.5rem;
+	}
+
+	.right {
+		font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+		font-size: var(--text-label);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--muted);
+		white-space: nowrap;
+		text-align: right;
+	}
+
+	/*
+	  A leader needs room to lead. On a narrow screen there isn't any, so the
+	  right side drops to its own line and the dots go away rather than
+	  shrinking to a meaningless stub.
+	*/
+	@media (max-width: 520px) {
+		.leader-row {
+			flex-wrap: wrap;
+			gap: 0.1rem 0.6rem;
+		}
+
+		.dots {
+			display: none;
+		}
+
+		.right {
+			flex-basis: 100%;
+			text-align: left;
+			white-space: normal;
+		}
+	}
+</style>

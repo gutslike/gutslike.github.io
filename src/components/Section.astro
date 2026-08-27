@@ -1,0 +1,70 @@
+---
+/**
+ * One top-level section of a page: a narrow left rail carrying its number and
+ * a one-word label, and the content beside it.
+ *
+ * The numbers are not decoration. These pages are documents meant to be read
+ * top to bottom, and `§ n` is how a paper refers to its own parts.
+ */
+interface Props {
+	n: string;
+	label: string;
+}
+
+const { n, label } = Astro.props;
+---
+
+<section class="section">
+	<div class="rail">
+		<span class="n">§ {n}</span>
+		<span class="label">{label}</span>
+	</div>
+	<div class="content"><slot /></div>
+</section>
+
+<style>
+	.section {
+		display: grid;
+		grid-template-columns: 8.5rem minmax(0, 1fr);
+		gap: 1.75rem;
+		padding: 2.25rem 0;
+		border-bottom: 1px solid var(--line);
+	}
+
+	.section:last-of-type {
+		border-bottom: none;
+	}
+
+	.rail {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+	}
+
+	.n,
+	.label {
+		font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+		font-size: var(--text-label);
+		font-weight: 700;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--muted);
+		line-height: 1.4;
+	}
+
+	/*
+	  Below this the rail would squeeze the content to nothing, so it stops
+	  being a rail and becomes a label stacked above what it names.
+	*/
+	@media (max-width: 760px) {
+		.section {
+			grid-template-columns: minmax(0, 1fr);
+			gap: 0.75rem;
+		}
+
+		.rail {
+			flex-direction: row;
+			gap: 0.75rem;
+		}
+	}
+</style>
