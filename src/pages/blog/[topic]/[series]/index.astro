@@ -3,6 +3,7 @@ import Base from '../../../../layouts/Base.astro';
 import {
 	byReadingOrder,
 	getPosts,
+	labelOf,
 	seriesOf,
 	topicOf,
 } from '../../../../lib/posts';
@@ -32,6 +33,7 @@ export async function getStaticPaths() {
 }
 
 const { topic, series } = Astro.params;
+const label = labelOf(series!);
 
 // A series is a reading order, so oldest first — not newest first like the feed.
 const posts = (await getPosts())
@@ -39,9 +41,9 @@ const posts = (await getPosts())
 	.sort(byReadingOrder);
 ---
 
-<Base title={series} description={`Posts in the ${series} series`}>
+<Base title={label} description={`Every post in the ${label} series.`}>
 	<main>
-		<h1>{series}</h1>
+		<h1>{label}</h1>
 
 		<ul class="post-list">
 			{

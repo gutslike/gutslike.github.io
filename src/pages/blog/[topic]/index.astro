@@ -1,6 +1,12 @@
 ---
 import Base from '../../../layouts/Base.astro';
-import { byReadingOrder, getPosts, seriesOf, topicOf } from '../../../lib/posts';
+import {
+	byReadingOrder,
+	getPosts,
+	labelOf,
+	seriesOf,
+	topicOf,
+} from '../../../lib/posts';
 
 export async function getStaticPaths() {
 	const posts = await getPosts();
@@ -13,6 +19,7 @@ export async function getStaticPaths() {
 }
 
 const { topic } = Astro.params;
+const label = labelOf(topic!);
 
 const inTopic = (await getPosts()).filter((post) => topicOf(post) === topic);
 
@@ -39,10 +46,10 @@ const series = [...earliestBySeries.entries()]
 const standalone = inTopic.filter((post) => !seriesOf(post)).sort(byReadingOrder);
 ---
 
-<Base title={topic} description={`Posts and series in ${topic}`}>
+<Base title={label} description={`Series and posts in ${label}`}>
 	<main>
 		<div class="hero">
-			<h1>{topic}</h1>
+			<h1>{label}</h1>
 			<p>Series and structured learning paths.</p>
 		</div>
 
@@ -51,7 +58,7 @@ const standalone = inTopic.filter((post) => !seriesOf(post)).sort(byReadingOrder
 				<div class="grid">
 					{series.map((item) => (
 						<a class="card" href={`/blog/${topic}/${item}`}>
-							<h2>{item}</h2>
+							<h2>{labelOf(item)}</h2>
 							<p>Explore posts inside this series.</p>
 						</a>
 					))}
