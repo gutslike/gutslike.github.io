@@ -20,7 +20,7 @@ const up = topic
 
 <nav class="post-nav" aria-label="Post navigation">
 	<a class="up" href={up.href}>
-		<span class="dir">↑ Back to</span>
+		<span class="dir"><svg class="arrow up-arrow" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M3 9.5 8 4.5l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Back to</span>
 		<span class="title">{up.label}</span>
 	</a>
 
@@ -29,7 +29,7 @@ const up = topic
 			<div class="siblings">
 				{prev ? (
 					<a class="prev" href={`/blog/${prev.id}/`} rel="prev">
-						<span class="dir">← Previous</span>
+						<span class="dir"><svg class="arrow" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M9.5 3 4.5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Previous</span>
 						<span class="title">{prev.data.title}</span>
 					</a>
 				) : (
@@ -38,7 +38,7 @@ const up = topic
 
 				{next && (
 					<a class="next" href={`/blog/${next.id}/`} rel="next">
-						<span class="dir">Next →</span>
+						<span class="dir">Next<svg class="arrow" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M6.5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
 						<span class="title">{next.data.title}</span>
 					</a>
 				)}
@@ -95,6 +95,16 @@ const up = topic
 	.siblings .next {
 		text-align: right;
 		grid-column: 2;
+	}
+
+	.siblings .next .dir {
+		justify-content: flex-end;
+	}
+
+	/* SVG arrows rather than glyphs — see the note in Breadcrumbs.astro. */
+	.arrow {
+		display: block;
+		flex: none;
 	}
 
 	.dir {

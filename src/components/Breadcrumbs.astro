@@ -35,8 +35,8 @@ const back = leaf
 
 <nav class:list={['crumbs', { center }]} aria-label="Breadcrumb">
 	<a class="back" href={back.href}>
-		<span aria-hidden="true">←</span>
-		{back.label}
+		<svg class="arrow" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M9.5 3 4.5 8l5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+		<span>{back.label}</span>
 	</a>
 
 	<ol>
@@ -116,8 +116,6 @@ const back = leaf
 	*/
 	.back {
 		display: inline-flex;
-		/* The arrow is a symbol, not a letter — sitting it on the text baseline
-		   drops it below the cap height and it reads as falling off the row. */
 		align-items: center;
 		gap: 0.5em;
 		font-weight: 700;
@@ -134,6 +132,17 @@ const back = leaf
 	.back:hover {
 		border-color: var(--accent);
 		color: var(--accent-hover);
+	}
+
+	/*
+	  An SVG, not a "←". Arrow glyphs are drawn on the font's math axis rather
+	  than centred on cap height, so beside uppercase text they sit visibly low
+	  no matter how the boxes are aligned — the box was centred; the ink was
+	  not. A path centred in its own viewBox has no such opinion.
+	*/
+	.back .arrow {
+		display: block;
+		flex: none;
 	}
 
 	/* On a phone the trail is redundant next to the button. */

@@ -1,43 +1,43 @@
 /*
-  One token system. Night by default.
+  One token system, two palettes.
 
   Colours are declared here and nowhere else — components reference tokens, not
-  literals, so a theme change is a change to this file only.
+  literals, so a theme change is a change to this file only. Every token is
+  defined three times:
 
-  The ground is the navy from the site's monogram, lifted until text sits on it
-  comfortably. The foreground and accents are gruvbox: warm cream on cold blue,
-  which is what stops a dark theme reading as grey sludge.
+    :root                              daylight, the default
+    prefers-color-scheme: dark         the OS preference, guarded so an explicit
+                                       light choice still wins
+    :root[data-theme="dark"]           an explicit choice, which beats the OS
 
-  Two states, not three. Night is the default for everyone — the site does not
-  follow the OS preference, because the palette *is* the design here rather than
-  a mode. The [data-theme="light"] block below is a complete daylight palette,
-  inert today, so a toggle is a few lines of script rather than a rewrite.
+  Daylight is green paper: a typeset page. Night is the navy from the site's
+  monogram with gruvbox's warm foreground on top — cream on cold blue, which is
+  what stops a dark theme reading as grey sludge.
+
+  ThemeToggle.astro writes data-theme and BaseHead re-applies it before first
+  paint, so the three states above are all live rather than aspirational.
 */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* Surfaces and text */
-  --ground: #131a26;
-  --surface: #1a2231;
-  --sunken: #222c3d;
-  --ink: #ebdbb2;
-  --muted: #a89984;
-  --line: #2e3a4d;
+  /* Surfaces and text — paper */
+  --ground: #f3f4ef;
+  --surface: #ffffff;
+  --sunken: #e8eae1;
+  --ink: #191c15;
+  --muted: #596051;
+  --line: #d2d7c8;
 
-  /* Accent — gruvbox bright yellow. On this navy it reads as lamplight. */
-  --accent: #fabd2f;
-  --accent-hover: #ffd866;
-  --on-accent: #131a26;
+  /* Accent. Hover goes *darker* here — on a light ground more emphasis means
+     less light. The night block moves the other way. */
+  --accent: #2f6b1f;
+  --accent-hover: #265717;
+  --on-accent: #f3f4ef;
 
-  /*
-    Code sits in a well, slightly below the page rather than raised above it.
-    This exact value is load-bearing: gruvbox's syntax colours are tuned to
-    gruvbox's own background, and every candidate surface lighter than this
-    drops the comment grey below 4.5:1. At #161d29 the worst token clears at
-    4.61:1.
-  */
-  --code-surface: #161d29;
+  /* github-light's comment grey clears white at 4.55:1 and nothing dimmer, so
+     code sits on pure white here rather than on --sunken. */
+  --code-surface: #ffffff;
 
   /* Type scale, 1.25 ratio, anchored to the root so it doesn't drift with the
      body size. h1 lands at 52px. */
@@ -68,25 +68,51 @@
 }
 
 /*
-  Daylight. Gruvbox light: the same warmth, inverted. Nothing sets this
-  attribute yet.
+  Night. Declared once as a custom property block and applied from two
+  selectors below, so the OS preference and an explicit choice can never
+  disagree about what "dark" means.
 */
-:root[data-theme='light'] {
-  color-scheme: light;
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
 
-  --ground: #f5efe0;
-  --surface: #fbf6e8;
-  --sunken: #ece2c8;
-  --ink: #282828;
-  --muted: #665c54;
-  --line: #d5c9a8;
+    --ground: #131a26;
+    --surface: #1a2231;
+    --sunken: #222c3d;
+    --ink: #ebdbb2;
+    --muted: #a89984;
+    --line: #2e3a4d;
 
-  /* Darker than the accent, not lighter — on a light ground more emphasis
-     means less light. The night block moves the other way. */
-  --accent: #6d5805;
-  --accent-hover: #4f4003;
-  --on-accent: #fbf6e8;
-  --code-surface: #f2e8ce;
+    --accent: #fabd2f;
+    --accent-hover: #ffd866;
+    --on-accent: #131a26;
+
+    /*
+      Load-bearing rather than cosmetic. Gruvbox's syntax colours are tuned to
+      gruvbox's own background; on the site's --sunken the comment grey falls to
+      3.82:1. At #161d29 the worst token clears 4.61:1.
+    */
+    --code-surface: #161d29;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* Must stay byte-identical to the block above. A token defined in one and
+     not the other renders one theme's text on the other theme's ground. */
+  --ground: #131a26;
+  --surface: #1a2231;
+  --sunken: #222c3d;
+  --ink: #ebdbb2;
+  --muted: #a89984;
+  --line: #2e3a4d;
+
+  --accent: #fabd2f;
+  --accent-hover: #ffd866;
+  --on-accent: #131a26;
+
+  --code-surface: #161d29;
 }
 
 *,
@@ -243,30 +269,36 @@ pre > code {
   astro.config.mjs), so the theme is picked here rather than baked into the
   markup at build time. Astro renames Shiki's `.shiki` class to `.astro-code`.
 
-  Dark is the default, matching the page.
+  The background comes from --code-surface, not from Shiki, so the figure, its
+  label bar and the code read as one object instead of three stacked tones.
 */
 .astro-code,
 .astro-code span {
-  color: var(--shiki-dark);
-  /*
-    Syntax colours come from gruvbox; the surface does not. Shiki's own
-    background is a warm grey that sits visibly apart from this site's navy —
-    and from the label bar directly above it, which uses --sunken. Taking the
-    surface from the token keeps one dark instead of two.
-  */
-  background-color: var(--code-surface);
-  font-style: var(--shiki-dark-font-style);
-  font-weight: var(--shiki-dark-font-weight);
-  text-decoration: var(--shiki-dark-text-decoration);
-}
-
-:root[data-theme='light'] .astro-code,
-:root[data-theme='light'] .astro-code span {
   color: var(--shiki-light);
   background-color: var(--code-surface);
   font-style: var(--shiki-light-font-style);
   font-weight: var(--shiki-light-font-weight);
   text-decoration: var(--shiki-light-text-decoration);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) .astro-code,
+  :root:not([data-theme='light']) .astro-code span {
+    color: var(--shiki-dark);
+    background-color: var(--code-surface);
+    font-style: var(--shiki-dark-font-style);
+    font-weight: var(--shiki-dark-font-weight);
+    text-decoration: var(--shiki-dark-text-decoration);
+  }
+}
+
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark);
+  background-color: var(--code-surface);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+  text-decoration: var(--shiki-dark-text-decoration);
 }
 
 blockquote {

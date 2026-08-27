@@ -18,7 +18,7 @@ export default defineConfig({
       // global.css, so code blocks follow the page theme instead of being
       // locked to one at build time.
       themes: {
-        light: "gruvbox-light-medium",
+        light: "github-light-default",
         dark: "gruvbox-dark-medium",
       },
       defaultColor: false,

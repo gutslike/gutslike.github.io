@@ -36,6 +36,19 @@ const { title, description, image = FallbackImage } = Astro.props;
 />
 <meta name="generator" content={Astro.generator} />
 
+<!--
+	Applies a stored theme choice before the first paint. Inline and blocking on
+	purpose: deferred, the page would paint the OS palette and then swap, which
+	is the flash this exists to prevent. No stored choice means no attribute,
+	which leaves prefers-color-scheme in charge.
+-->
+<script is:inline>
+	try {
+		const t = localStorage.getItem('theme');
+		if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+	} catch {}
+</script>
+
 <Font cssVariable="--font-serif" preload />
 <Font cssVariable="--font-mono" />
 

@@ -1,0 +1,133 @@
+---
+/**
+ * Light/dark switch.
+ *
+ * The button starts hidden and is revealed by its own script, so a reader
+ * without JavaScript is never shown a control that cannot work. Without it the
+ * site still follows the OS preference — the toggle overrides that, it is not
+ * what makes theming happen.
+ *
+ * The pre-paint half of this lives in BaseHead: the stored choice has to be on
+ * <html> before the first paint or the page flashes the wrong palette.
+ */
+---
+
+<button class="theme-toggle" type="button" hidden aria-pressed="false">
+	<span class="sr-only">Switch to dark theme</span>
+
+	<svg class="sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+		<circle cx="12" cy="12" r="4.2" fill="currentColor"></circle>
+		<g stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+			<line x1="12" y1="1.8" x2="12" y2="4.2"></line>
+			<line x1="12" y1="19.8" x2="12" y2="22.2"></line>
+			<line x1="1.8" y1="12" x2="4.2" y2="12"></line>
+			<line x1="19.8" y1="12" x2="22.2" y2="12"></line>
+			<line x1="4.8" y1="4.8" x2="6.5" y2="6.5"></line>
+			<line x1="17.5" y1="17.5" x2="19.2" y2="19.2"></line>
+			<line x1="4.8" y1="19.2" x2="6.5" y2="17.5"></line>
+			<line x1="17.5" y1="6.5" x2="19.2" y2="4.8"></line>
+		</g>
+	</svg>
+
+	<svg class="moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+		<path
+			fill="currentColor"
+			d="M21 13.2A9 9 0 1 1 10.8 3a7.2 7.2 0 0 0 10.2 10.2Z"></path>
+	</svg>
+</button>
+
+<style>
+	.theme-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.2em;
+		height: 2.2em;
+		padding: 0;
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		background: none;
+		color: var(--muted);
+		cursor: pointer;
+		transition:
+			color 0.2s ease,
+			border-color 0.2s ease;
+	}
+
+	.theme-toggle[hidden] {
+		display: none;
+	}
+
+	.theme-toggle:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+	}
+
+	/* Show the destination, not the current state: in daylight the button
+	   offers night. */
+	.theme-toggle .moon {
+		display: block;
+	}
+	.theme-toggle .sun {
+		display: none;
+	}
+
+	.theme-toggle[aria-pressed='true'] .moon {
+		display: none;
+	}
+	.theme-toggle[aria-pressed='true'] .sun {
+		display: block;
+	}
+</style>
+
+<script>
+	const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
+
+	if (button) {
+		const root = document.documentElement;
+		const label = button.querySelector('.sr-only');
+
+		// What is actually on screen right now: an explicit choice if one has
+		// been made, otherwise whatever the OS asked for.
+		const current = (): 'light' | 'dark' => {
+			const set = root.dataset.theme;
+			if (set === 'light' || set === 'dark') return set;
+			return window.matchMedia('(prefers-color-scheme: dark)').matches
+				? 'dark'
+				: 'light';
+		};
+
+		const paint = () => {
+			const dark = current() === 'dark';
+			button.setAttribute('aria-pressed', String(dark));
+			if (label) {
+				label.textContent = dark
+					? 'Switch to light theme'
+					: 'Switch to dark theme';
+			}
+		};
+
+		button.addEventListener('click', () => {
+			const next = current() === 'dark' ? 'light' : 'dark';
+			root.dataset.theme = next;
+			try {
+				localStorage.setItem('theme', next);
+			} catch {
+				// Private mode, or storage disabled. The choice still applies to
+				// this page; it just will not survive a reload.
+			}
+			paint();
+		});
+
+		// Someone changing their OS theme should be followed, but only while no
+		// explicit choice is in force.
+		window
+			.matchMedia('(prefers-color-scheme: dark)')
+			.addEventListener('change', () => {
+				if (!root.dataset.theme) paint();
+			});
+
+		paint();
+		button.hidden = false;
+	}
+</script>
