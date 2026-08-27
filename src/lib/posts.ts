@@ -103,3 +103,58 @@ export function neighbours(
 
 	return { prev: siblings[i - 1], next: siblings[i + 1] };
 }
+
+/** One series, with its posts in reading order and its most recent activity. */
+export interface SeriesEntry {
+	topic: string;
+	series: string;
+	posts: Post[];
+	latest: Date;
+}
+
+/**
+ * Every (topic, series) pair that has at least one post, most recently active
+ * first — so a series being written now rises above one finished in May.
+ *
+ * Posts within an entry keep reading order, because a series is a curriculum
+ * even when the index that lists it is sorted by recency.
+ */
+export function seriesIndex(all: Post[]): SeriesEntry[] {
+	const groups = new Map<string, Post[]>();
+
+	for (const post of all) {
+		const topic = topicOf(post);
+		const series = seriesOf(post);
+		if (!topic || !series) continue;
+
+		const key = `${topic}/${series}`;
+		const bucket = groups.get(key);
+		if (bucket) bucket.push(post);
+		else groups.set(key, [post]);
+	}
+
+	return [...groups.entries()]
+		.map(([key, posts]) => {
+			// Split on the first slash only. A topic is one path segment, so the
+			// remainder is the series name even if it somehow contained a slash.
+			const slash = key.indexOf('/');
+			return {
+				topic: key.slice(0, slash),
+				series: key.slice(slash + 1),
+				posts: [...posts].sort(byReadingOrder),
+				latest: posts.reduce(
+					(max, p) => (p.data.pubDate > max ? p.data.pubDate : max),
+					posts[0].data.pubDate,
+				),
+			};
+		})
+		.sort((a, b) => b.latest.valueOf() - a.latest.valueOf());
+}
+
+/**
+ * Posts that belong to a topic but to no series — the "notes" zone on /blog.
+ * Newest first, because these are notes rather than a curriculum.
+ */
+export function standalonePosts(all: Post[]): Post[] {
+	return all.filter((post) => topicOf(post) && !seriesOf(post)).sort(byNewest);
+}
