@@ -1,101 +1,150 @@
 ---
-import AboutHeroImage from '../assets/blog-placeholder-about.jpg';
-import Layout from '../layouts/BlogPost.astro';
+import LeaderRow from '../components/LeaderRow.astro';
+import Section from '../components/Section.astro';
+import Base from '../layouts/Base.astro';
+import { CERTIFICATES, EDUCATION, PROFILE } from '../lib/profile';
+
+const description =
+	'Manubhav Sharma — full-stack developer, B.Tech CSE at ABES Institute of Technology. What I have built, what I have studied, and what I do when I am not doing either.';
 ---
 
-<Layout
-	title="About Me"
-	description="Manubhav Sharma — CS (AI) student writing about Go, Python, algorithms, and the systems behind the things I build."
-	pubDate={new Date('August 08 2021')}
-	heroImage={AboutHeroImage}
->
-		<section class="hero">
-
+<Base title="About" description={description}>
+	<main>
+		<Section n="0" label="Intro">
+			<h1>About</h1>
 			<p>
-				Hey, I’m Manubhav Sharma — a Computer Science (AI) student,
-				builder, and someone who enjoys figuring out how things work
-				under the hood.
+				I'm Manubhav Sharma — an aspiring full-stack developer, most at home in
+				the MERN stack, and reliably curious about what a thing is doing
+				underneath the layer I'm supposed to be working at.
 			</p>
-
 			<p>
-				I enjoy building projects that sit at the intersection of
-				artificial intelligence, software engineering, and practical
-				problem solving.
+				I build with React on the front and Node and Express behind it, and I
+				test what I build rather than hoping. Somewhere along the way the
+				testing stopped being a chore and turned into one of the parts I'm best
+				at.
 			</p>
-		</section>
+		</Section>
 
-		<section>
-			<h2>My Journey Into Tech</h2>
-
+		<Section n="1" label="Path">
 			<p>
-				What started as curiosity slowly turned into an obsession with
-				building things. Over time, that curiosity evolved into working on
-				AI systems, full-stack applications, mobile apps, testing workflows,
-				and experimenting with different technologies.
+				It started as curiosity and turned into a habit. Something would break,
+				or work for a reason I couldn't explain, and the only way out was to go
+				a layer down. That's how the C projects happened — writing an HTTPS
+				server rather than importing one, building a command-line parser from
+				nothing to understand what every CLI tool is quietly doing with my
+				arguments.
 			</p>
-
 			<p>
-				I enjoy learning by building — which means most concepts I learn
-				eventually become projects, notes, experiments, or blog posts.
+				The blog is the same instinct with a paper trail. I learn best by
+				writing something down for a person who doesn't know it yet, which
+				usually turns out to be me, six months later. Most of what's there is
+				Go, Python, algorithms, and the occasional note about infrastructure.
 			</p>
-		</section>
+		</Section>
 
-		<section>
-			<h2>Things I Like Working On</h2>
+		<Section n="2" label="Education">
+			<div class="rows">
+				{
+					EDUCATION.map((item) => (
+						<LeaderRow>
+							{item.what} — {item.where}
+							<Fragment slot="right">{item.when}</Fragment>
+						</LeaderRow>
+					))
+				}
+			</div>
+		</Section>
 
-			<ul>
-				<li>Artificial Intelligence & Deep Learning</li>
-				<li>System Design & Architecture</li>
-				<li>Full Stack Development</li>
-				<li>Developer Productivity Systems</li>
-				<li>Performance Optimization</li>
-				<li>Problem Solving & Algorithms</li>
-			</ul>
-		</section>
-
-		<section>
-			<h2>Projects & Experiments</h2>
-
+		<Section n="3" label="Hackathon">
 			<p>
-				I enjoy building projects that solve practical problems and teach
-				me something new in the process.
+				<strong>Smart India Hackathon</strong> — participant. Our team designed
+				a portal, web and app, for emergency SOS transmission in places with
+				almost no connectivity: relay a victim's location and a set of survival
+				instructions to the nearest government response agency, the NDRF among
+				them, using whatever signal is actually available.
 			</p>
+		</Section>
 
-			<ul>
-				<li>AI-powered FIR Classification System</li>
-				<li>Collaborative Team Management Platform</li>
-				<li>Bluetooth Data Streaming Application</li>
-				<li>Expense Tracking Platform</li>
-				<li>Various experiments in AI and automation</li>
-			</ul>
-		</section>
+		<Section n="4" label="Certificates">
+			<div class="rows">
+				{
+					CERTIFICATES.map((cert) => (
+						<LeaderRow>
+							{cert.name}
+							<Fragment slot="right">{cert.issuer}</Fragment>
+						</LeaderRow>
+					))
+				}
+			</div>
+		</Section>
 
-		<section>
-			<h2>Why I Write</h2>
-
+		<Section n="5" label="Beyond code">
 			<p>
-				This blog exists because writing helps me think better.
+				I take things apart. Hardware mostly — there's a specific satisfaction
+				in the moment a sealed object becomes a set of parts that explain each
+				other. It's the same pull that made me write an HTTPS server in C rather
+				than use one, and probably why most of what I blog about sits a layer
+				below where I actually need to be working.
 			</p>
-
 			<p>
-				Here, I document concepts, mistakes, debugging sessions,
-				project decisions, and things I wish someone had explained
-				to me earlier.
+				Outside that: bikes, and the travelling that gives me an excuse to ride.
+				Basketball. Music, more or less constantly. Geopolitics, which I follow
+				closely enough that people have stopped asking. And a steady output of
+				small software built for no reason beyond thinking it ought to exist.
 			</p>
-
 			<p>
-				If you're also learning, building, or experimenting —
-				hopefully something here helps.
+				Manga is the one I'd argue about. <em>Berserk</em>, <em>Vagabond</em>,
+				<em>Monster</em>, <em>20th Century Boys</em>, <em>Pluto</em> — long
+				stories patient enough to let their characters be wrong for years before
+				they're right. Anime and film for the same reasons, less systematically.
 			</p>
-		</section>
+		</Section>
 
-		<section>
-			<h2>Beyond Code</h2>
-
+		<Section n="6" label="Why I write">
 			<p>
-				Apart from coding, I enjoy problem solving, logic building,
-				competitive challenges, and exploring how technology can
-				make systems more efficient.
+				Writing is how I find out whether I actually understood something. A
+				concept can feel solid right up to the sentence that won't finish.
 			</p>
-		</section>
-</Layout>
+			<p>
+				So this is where the notes go: decisions, mistakes, debugging sessions
+				that took far longer than they should have, and the explanations I wish
+				someone had given me the first time. If you're learning the same things,
+				some of it might save you an afternoon.
+			</p>
+			<p class="sign">
+				<a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+			</p>
+		</Section>
+	</main>
+</Base>
+
+<style>
+	main {
+		--main-max: 60rem;
+	}
+
+	h1 {
+		font-size: var(--text-h1);
+		margin: 0 0 1rem;
+	}
+
+	p {
+		max-width: 62ch;
+	}
+
+	.rows {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.sign {
+		margin-top: 1.5rem;
+		font-family: var(--font-mono, ui-monospace, monospace);
+		font-size: var(--text-label);
+		letter-spacing: 0.08em;
+	}
+
+	.sign a {
+		text-decoration: none;
+	}
+</style>
