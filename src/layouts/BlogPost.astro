@@ -48,7 +48,7 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length >= 
 			}
 
 			<header class="post-head">
-				<Breadcrumbs topic={topic} series={series} />
+				<Breadcrumbs topic={topic} series={series} center leaf />
 				<h1>{title}</h1>
 				<p class="meta">
 					<FormattedDate date={pubDate} />
@@ -77,7 +77,7 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length >= 
 			</div>
 
 			<div class="post-foot">
-				<PostNav prev={prev} next={next} />
+				<PostNav prev={prev} next={next} topic={topic} series={series} />
 			</div>
 		</article>
 	</main>
@@ -87,7 +87,7 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length >= 
 
 <style>
 	main {
-		--main-max: 1100px;
+		--main-max: var(--page-max);
 	}
 
 	.hero-image {

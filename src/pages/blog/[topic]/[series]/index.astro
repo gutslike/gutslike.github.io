@@ -1,4 +1,5 @@
 ---
+import Breadcrumbs from '../../../../components/Breadcrumbs.astro';
 import Base from '../../../../layouts/Base.astro';
 import {
 	byReadingOrder,
@@ -43,7 +44,12 @@ const posts = (await getPosts())
 
 <Base title={label} description={`Every post in the ${label} series.`}>
 	<main>
-		<h1>{label}</h1>
+		<Breadcrumbs topic={topic} series={series} />
+
+		<div class="head">
+			<h1>{label}</h1>
+			<p>{posts.length} {posts.length === 1 ? 'post' : 'posts'}, in reading order.</p>
+		</div>
 
 		<ul class="post-list">
 			{
@@ -62,8 +68,17 @@ const posts = (await getPosts())
 
 <style>
 	main {
-		--main-max: 900px;
+		--main-max: var(--page-max);
 		padding: 3rem 1.5rem;
+	}
+
+	.head {
+		margin: 2rem 0 3rem;
+	}
+
+	.head p {
+		color: var(--muted);
+		margin: 0;
 	}
 
 	.post-list {

@@ -1,52 +1,72 @@
 ---
-import type { Post } from '../lib/posts';
+import { labelOf, type Post } from '../lib/posts';
 
 interface Props {
 	prev?: Post | undefined;
 	next?: Post | undefined;
+	topic?: string | undefined;
+	series?: string | undefined;
 }
 
-const { prev, next } = Astro.props;
+const { prev, next, topic, series } = Astro.props;
+
+// Where "up" goes: the series if the post is in one, otherwise its topic.
+const up = topic
+	? series
+		? { href: `/blog/${topic}/${series}/`, label: labelOf(series) }
+		: { href: `/blog/${topic}/`, label: labelOf(topic) }
+	: { href: '/blog/', label: 'Writing' };
 ---
 
-{
-	(prev || next) && (
-		<nav class="post-nav" aria-label="More in this series">
-			{prev ? (
-				<a class="prev" href={`/blog/${prev.id}/`} rel="prev">
-					<span class="dir">← Previous</span>
-					<span class="title">{prev.data.title}</span>
-				</a>
-			) : (
-				<span />
-			)}
+<nav class="post-nav" aria-label="Post navigation">
+	<a class="up" href={up.href}>
+		<span class="dir">↑ Back to</span>
+		<span class="title">{up.label}</span>
+	</a>
 
-			{next && (
-				<a class="next" href={`/blog/${next.id}/`} rel="next">
-					<span class="dir">Next →</span>
-					<span class="title">{next.data.title}</span>
-				</a>
-			)}
-		</nav>
-	)
-}
+	{
+		(prev || next) && (
+			<div class="siblings">
+				{prev ? (
+					<a class="prev" href={`/blog/${prev.id}/`} rel="prev">
+						<span class="dir">← Previous</span>
+						<span class="title">{prev.data.title}</span>
+					</a>
+				) : (
+					<span />
+				)}
+
+				{next && (
+					<a class="next" href={`/blog/${next.id}/`} rel="next">
+						<span class="dir">Next →</span>
+						<span class="title">{next.data.title}</span>
+					</a>
+				)}
+			</div>
+		)
+	}
+</nav>
 
 <style>
 	.post-nav {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
 		margin-top: 4rem;
 		padding-top: 2rem;
 		border-top: 1px solid var(--line);
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.siblings {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1rem;
 	}
 
 	.post-nav a {
 		display: flex;
 		flex-direction: column;
 		gap: 0.3rem;
-		padding: 1rem 0;
-		border-top: 1px solid var(--line);
 		text-decoration: none;
 		color: var(--ink);
 		transition:
@@ -54,18 +74,34 @@ const { prev, next } = Astro.props;
 			color 0.2s ease;
 	}
 
-	.post-nav a:hover {
-		border-color: var(--accent);
-		color: var(--accent);
+	.siblings a {
+		padding: 1rem 0;
+		border-top: 1px solid var(--line);
 	}
 
-	.post-nav .next {
+	.post-nav a:hover {
+		color: var(--accent);
+		border-color: var(--accent);
+	}
+
+	/* The way out of the series, not just along it. */
+	.up {
+		align-self: start;
+		padding: 0.7em 1.1em;
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+	}
+
+	.siblings .next {
 		text-align: right;
 		grid-column: 2;
 	}
 
 	.dir {
-		font-size: var(--text-sm);
+		font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+		font-size: var(--text-label);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
 		color: var(--muted);
 	}
 
@@ -75,11 +111,11 @@ const { prev, next } = Astro.props;
 	}
 
 	@media (max-width: 640px) {
-		.post-nav {
+		.siblings {
 			grid-template-columns: 1fr;
 		}
 
-		.post-nav .next {
+		.siblings .next {
 			grid-column: 1;
 			text-align: left;
 		}

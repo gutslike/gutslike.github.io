@@ -153,7 +153,7 @@ const latest = [...posts].sort(byNewest).slice(0, 3);
 
 <style>
 	main {
-		--main-max: 60rem;
+		--main-max: var(--page-max);
 	}
 
 	/* --- section 0, who --- */
@@ -180,7 +180,7 @@ const latest = [...posts].sort(byNewest).slice(0, 3);
 	}
 
 	.who-text p {
-		max-width: 46ch;
+		max-width: 56ch;
 	}
 
 	.actions {
@@ -284,7 +284,7 @@ const latest = [...posts].sort(byNewest).slice(0, 3);
 
 	.project p {
 		margin: 0.6rem 0 0;
-		max-width: 62ch;
+		max-width: 72ch;
 		color: var(--muted);
 		font-size: 0.95em;
 	}

@@ -1,4 +1,5 @@
 ---
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
 import Base from '../../../layouts/Base.astro';
 import {
 	byReadingOrder,
@@ -48,6 +49,8 @@ const standalone = inTopic.filter((post) => !seriesOf(post)).sort(byReadingOrder
 
 <Base title={label} description={`Series and posts in ${label}`}>
 	<main>
+		<Breadcrumbs topic={topic} />
+
 		<div class="hero">
 			<h1>{label}</h1>
 			<p>Series and structured learning paths.</p>
@@ -88,13 +91,17 @@ const standalone = inTopic.filter((post) => !seriesOf(post)).sort(byReadingOrder
 
 <style>
 	main {
-		--main-max: 1100px;
+		--main-max: var(--page-max);
 		padding: 3rem 1.5rem;
 	}
 
 	.hero {
-		text-align: center;
-		margin-bottom: 4rem;
+		margin: 2rem 0 3rem;
+	}
+
+	.hero p {
+		color: var(--muted);
+		margin: 0;
 	}
 
 	.grid {

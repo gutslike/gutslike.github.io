@@ -39,24 +39,31 @@
   --on-accent: #f3f4ef;
 
   /* Type scale, 1.25 ratio, anchored to the root so it doesn't drift with the
-     body size. h1 lands at 40px instead of the template's 61px. */
-  --text-sm: 0.85rem;
-  --text-label: 0.7rem;
-  --text-h6: 1rem;
-  --text-h5: 1.1rem;
-  --text-h4: 1.28rem;
-  --text-h3: 1.6rem;
-  --text-h2: 2rem;
-  --text-h1: 2.5rem;
+     body size. h1 lands at 52px. */
+  --text-sm: 0.95rem;
+  --text-label: 0.8rem;
+  --text-h6: 1.1rem;
+  --text-h5: 1.25rem;
+  --text-h4: 1.5rem;
+  --text-h3: 1.95rem;
+  --text-h2: 2.5rem;
+  --text-h1: 3.25rem;
 
   /* Paper does not float and does not have soft corners. There are no shadow
      tokens at all — separation is a hairline rule or nothing. */
   --radius: 2px;
   --radius-lg: 3px;
 
-  /* Reading measure. `ch` tracks the font, so this stays ~68 characters
+  /* Reading measure. `ch` tracks the font, so this stays ~76 characters
      whatever the body size is set to. */
-  --measure: 68ch;
+  --measure: 76ch;
+
+  /*
+    One page width, for the chrome and the content alike. The header, the
+    footer and every <main> read this, so they cannot drift apart — they had,
+    by 176px, which read as the header being narrower than the page.
+  */
+  --page-max: 78rem;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -107,7 +114,7 @@ body {
   text-align: left;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1.7;
   background: var(--ground);
   color: var(--ink);
@@ -122,9 +129,9 @@ body {
 */
 main {
   width: 100%;
-  max-width: min(var(--main-max, var(--measure)), calc(100% - 2em));
+  max-width: min(var(--main-max, var(--measure)), calc(100% - 3em));
   margin-inline: auto;
-  padding: 3em 1em;
+  padding: 3em 1.5em;
 }
 
 /*
@@ -292,15 +299,16 @@ hr {
 
 @media (max-width: 720px) {
   body {
-    font-size: 18px;
+    font-size: 19px;
   }
   main {
     padding: 1em;
   }
   :root {
-    --text-h1: 2rem;
-    --text-h2: 1.6rem;
-    --text-h3: 1.35rem;
+    --text-h1: 2.4rem;
+    --text-h2: 1.9rem;
+    --text-h3: 1.55rem;
+    --text-h4: 1.3rem;
   }
 }
 

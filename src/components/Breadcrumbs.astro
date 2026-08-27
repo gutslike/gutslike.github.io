@@ -1,26 +1,58 @@
 ---
+import { labelOf } from '../lib/posts';
+
 interface Props {
 	topic?: string | undefined;
 	series?: string | undefined;
+	/** BlogPost centres its header, so its breadcrumb centres with it. */
+	center?: boolean;
+	/**
+	 * True when the current page sits *below* the last crumb — a post inside a
+	 * series, whose own title is the <h1> and so never appears in the trail.
+	 *
+	 * This changes two things, and getting it wrong is silent: which crumb is
+	 * marked aria-current, and where "back" goes. On a series index the last
+	 * crumb is you, so back is its parent. On a post the last crumb is already
+	 * the parent, so back is the last crumb itself.
+	 */
+	leaf?: boolean;
 }
 
-const { topic, series } = Astro.props;
+const { topic, series, center = false, leaf = false } = Astro.props;
 
-const crumbs = [{ label: 'Blog', href: '/blog' }];
+const crumbs = [{ label: 'Writing', href: '/blog/' }];
 
-if (topic) crumbs.push({ label: topic, href: `/blog/${topic}` });
+if (topic) crumbs.push({ label: labelOf(topic), href: `/blog/${topic}/` });
 if (topic && series) {
-	crumbs.push({ label: series, href: `/blog/${topic}/${series}` });
+	crumbs.push({ label: labelOf(series), href: `/blog/${topic}/${series}/` });
 }
+
+const currentIndex = leaf ? -1 : crumbs.length - 1;
+const back = leaf
+	? crumbs[crumbs.length - 1]
+	: (crumbs[crumbs.length - 2] ?? crumbs[0]);
 ---
 
-<nav class="crumbs" aria-label="Breadcrumb">
+<nav class:list={['crumbs', { center }]} aria-label="Breadcrumb">
+	<a class="back" href={back.href}>
+		<span aria-hidden="true">←</span>
+		{back.label}
+	</a>
+
 	<ol>
 		{
 			crumbs.map((crumb, i) => (
 				<li>
-					{i > 0 && <span aria-hidden="true">/</span>}
-					<a href={crumb.href}>{crumb.label}</a>
+					{i > 0 && (
+						<span class="sep" aria-hidden="true">
+							/
+						</span>
+					)}
+					{i === currentIndex ? (
+						<span aria-current="page">{crumb.label}</span>
+					) : (
+						<a href={crumb.href}>{crumb.label}</a>
+					)}
 				</li>
 			))
 		}
@@ -28,15 +60,24 @@ if (topic && series) {
 </nav>
 
 <style>
+	.crumbs {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.6em 1.25em;
+	}
+
+	.crumbs.center {
+		justify-content: center;
+	}
+
 	.crumbs ol {
 		list-style: none;
 		margin: 0;
 		padding: 0;
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: center;
 		gap: 0.5em;
-		font-size: var(--text-sm);
 	}
 
 	.crumbs li {
@@ -45,17 +86,58 @@ if (topic && series) {
 		align-items: baseline;
 	}
 
-	.crumbs span {
-		color: var(--muted);
+	.crumbs a,
+	.crumbs span,
+	.back {
+		font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
+		font-size: var(--text-label);
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
 	}
 
-	.crumbs a {
+	.crumbs ol a,
+	.sep {
 		color: var(--muted);
 		text-decoration: none;
 	}
 
-	.crumbs a:hover {
+	.crumbs ol a:hover {
 		color: var(--accent);
-		text-decoration: underline;
+	}
+
+	.crumbs [aria-current='page'] {
+		color: var(--ink);
+		font-weight: 700;
+	}
+
+	/*
+	  An explicit way out, not just a trail showing where you are. The trail
+	  tells you the structure; this is the button you actually press.
+	*/
+	.back {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 0.5em;
+		font-weight: 700;
+		text-decoration: none;
+		color: var(--accent);
+		padding: 0.45em 0.9em;
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		transition:
+			border-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.back:hover {
+		border-color: var(--accent);
+		color: var(--accent-hover);
+	}
+
+	/* On a phone the trail is redundant next to the button. */
+	@media (max-width: 560px) {
+		.crumbs ol {
+			display: none;
+		}
 	}
 </style>
