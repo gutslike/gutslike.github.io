@@ -23,33 +23,25 @@
   --emerald: #67e0a3;
   --aquamarine: #7cf0bd;
 
-  /* Surfaces and text */
-  --ground: #f4f7f1;
+  /* Surfaces and text — paper */
+  --ground: #f3f4ef;
   --surface: #ffffff;
-  --sunken: #e9efe4;
-  --ink: #14180f;
-  --muted: #5a6553;
-  --line: #dbe2d4;
+  --sunken: #e8eae1;
+  --ink: #191c15;
+  --muted: #596051;
+  --line: #d2d7c8;
 
-  /* Accent */
-  --accent: #2f5a1e;
-  --accent-hover: #3f7a28;
-  --on-accent: #ffffff;
-
-  /* Feature cards. Each gradient carries the text colour that reads on it —
-     that pairing is what stopped headings going near-black on dark spruce. */
-  --grad-1: linear-gradient(135deg, var(--spruce), var(--green));
-  --on-grad-1: #ffffff;
-  --grad-2: linear-gradient(135deg, var(--emerald), var(--aquamarine));
-  --on-grad-2: #10240a;
-
-  --shadow-sm: 0 8px 25px rgba(20, 40, 12, 0.06);
-  --shadow: 0 10px 35px rgba(20, 40, 12, 0.09);
-  --shadow-lg: 0 20px 45px rgba(20, 40, 12, 0.14);
+  /* Accent. Hover goes *darker* here — on a light ground more emphasis means
+     less light. The dark theme inverts that, which is why the two blocks move
+     in opposite directions. */
+  --accent: #2f6b1f;
+  --accent-hover: #265717;
+  --on-accent: #f3f4ef;
 
   /* Type scale, 1.25 ratio, anchored to the root so it doesn't drift with the
      body size. h1 lands at 40px instead of the template's 61px. */
   --text-sm: 0.85rem;
+  --text-label: 0.7rem;
   --text-h6: 1rem;
   --text-h5: 1.1rem;
   --text-h4: 1.28rem;
@@ -57,8 +49,10 @@
   --text-h2: 2rem;
   --text-h1: 2.5rem;
 
-  --radius: 24px;
-  --radius-lg: 28px;
+  /* Paper does not float and does not have soft corners. There are no shadow
+     tokens at all — separation is a hairline rule or nothing. */
+  --radius: 2px;
+  --radius-lg: 3px;
 
   /* Reading measure. `ch` tracks the font, so this stays ~68 characters
      whatever the body size is set to. */
@@ -69,50 +63,35 @@
   :root:not([data-theme='light']) {
     color-scheme: dark;
 
-    --ground: #0e120c;
-    --surface: #171c14;
-    --sunken: #1f261b;
-    --ink: #e5eade;
-    --muted: #96a28b;
-    --line: #2b3327;
+    /* Paper at night, not a console. Same hues, inverted lightness. */
+    --ground: #141610;
+    --surface: #1b1e16;
+    --sunken: #22261d;
+    --ink: #e4e7dc;
+    --muted: #949c88;
+    --line: #2c3128;
 
     --accent: #8fd16e;
     --accent-hover: #a6e086;
-    --on-accent: #0e120c;
-
-    --grad-1: linear-gradient(135deg, #1d3a10, #2c5c1d);
-    --on-grad-1: #eaf3e4;
-    --grad-2: linear-gradient(135deg, #144532, #1d6b4c);
-    --on-grad-2: #eafaf2;
-
-    --shadow-sm: 0 8px 25px rgba(0, 0, 0, 0.4);
-    --shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
-    --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.55);
+    --on-accent: #141610;
   }
 }
 
 :root[data-theme='dark'] {
   color-scheme: dark;
 
-  --ground: #0e120c;
-  --surface: #171c14;
-  --sunken: #1f261b;
-  --ink: #e5eade;
-  --muted: #96a28b;
-  --line: #2b3327;
+  /* Must stay byte-identical to the block above. A token defined in one and
+     not the other renders one theme's text on the other theme's ground. */
+  --ground: #141610;
+  --surface: #1b1e16;
+  --sunken: #22261d;
+  --ink: #e4e7dc;
+  --muted: #949c88;
+  --line: #2c3128;
 
   --accent: #8fd16e;
   --accent-hover: #a6e086;
-  --on-accent: #0e120c;
-
-  --grad-1: linear-gradient(135deg, #1d3a10, #2c5c1d);
-  --on-grad-1: #eaf3e4;
-  --grad-2: linear-gradient(135deg, #144532, #1d6b4c);
-  --on-grad-2: #eafaf2;
-
-  --shadow-sm: 0 8px 25px rgba(0, 0, 0, 0.4);
-  --shadow: 0 10px 35px rgba(0, 0, 0, 0.45);
-  --shadow-lg: 0 20px 45px rgba(0, 0, 0, 0.55);
+  --on-accent: #141610;
 }
 
 *,
@@ -239,7 +218,7 @@ td {
 img {
   max-width: 100%;
   height: auto;
-  border-radius: 8px;
+  border-radius: var(--radius);
 }
 
 code {
@@ -248,13 +227,13 @@ code {
   padding: 0.15em 0.4em;
   background-color: var(--sunken);
   color: var(--ink);
-  border-radius: 4px;
+  border-radius: var(--radius);
 }
 
 pre {
   font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, Consolas, monospace);
   padding: 1.25em 1.5em;
-  border-radius: 12px;
+  border-radius: var(--radius);
   border: 1px solid var(--line);
   overflow-x: auto;
 }
@@ -363,7 +342,7 @@ figure.code-block {
   position: relative;
   margin: 2em 0;
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--radius);
   overflow: hidden;
   background: var(--surface);
 }
@@ -393,7 +372,7 @@ figure.code-block pre {
   font-size: 0.72rem;
   line-height: 1;
   padding: 0.45em 0.8em;
-  border-radius: 999px;
+  border-radius: var(--radius);
   border: 1px solid var(--line);
   background: var(--surface);
   color: var(--muted);

@@ -27,3 +27,7 @@ pnpm-debug.log*
 ideas.txt
 # Playwright MCP scratch snapshots
 .playwright-mcp/
+
+# Ad-hoc verification screenshots
+*.png
+!src/assets/*.png

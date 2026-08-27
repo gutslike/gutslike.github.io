@@ -97,8 +97,8 @@ const hasToc = headings.filter((h) => h.depth === 2 || h.depth === 3).length >= 
 	.hero-image img {
 		display: block;
 		margin: 0 auto;
-		border-radius: 12px;
-		box-shadow: var(--shadow);
+		border-radius: var(--radius);
+		border: 1px solid var(--line);
 	}
 
 	.post-head {

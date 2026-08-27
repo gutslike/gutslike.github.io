@@ -67,44 +67,33 @@ const posts = (await getPosts())
 	.post-list {
 		list-style: none;
 		padding: 0;
+		margin: 0;
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		border-top: 1px solid var(--line);
 	}
 
 	.post-card {
 		display: block;
-		padding: 2rem;
-		border-radius: 24px;
+		padding: 1.1rem 0;
+		border-bottom: 1px solid var(--line);
 		text-decoration: none;
-		background: var(--surface);
-		border: 1px solid var(--line);
-		box-shadow: var(--shadow-sm);
 		color: var(--ink);
-		transition: 0.2s;
+		transition: color 0.2s ease;
 	}
 
 	.post-card:hover {
-		transform: translateY(-4px);
+		color: var(--accent);
 	}
 
 	.post-card h3 {
-		margin-top: 0;
-		font-size: var(--text-h4);
+		margin: 0 0 0.2rem;
+		font-size: var(--text-h5);
 	}
 
 	.post-card p {
-		margin-bottom: 0;
+		margin: 0;
+		font-size: var(--text-sm);
 		color: var(--muted);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.post-card {
-			transition: none;
-		}
-
-		.post-card:hover {
-			transform: none;
-		}
 	}
 </style>
