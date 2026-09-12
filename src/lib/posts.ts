@@ -152,11 +152,26 @@ export function seriesIndex(all: Post[]): SeriesEntry[] {
 }
 
 /**
- * Posts that belong to a topic but to no series — the "notes" zone on /blog.
- * Newest first, because these are notes rather than a curriculum.
+ * Blogs that contain views and opinions, not part of documentation.
+ * Newest first.
+ */
+export function blogPosts(all: Post[]): Post[] {
+	return all.filter((post) => topicOf(post) === 'blogs').sort(byNewest);
+}
+
+/**
+ * Debugging stories.
+ * Newest first.
+ */
+export function debuggingPosts(all: Post[]): Post[] {
+	return all.filter((post) => topicOf(post) === 'debugging').sort(byNewest);
+}
+
+/**
+ * Posts that belong to a topic but not a series (loose notes).
  */
 export function standalonePosts(all: Post[]): Post[] {
-	return all.filter((post) => topicOf(post) && !seriesOf(post)).sort(byNewest);
+	return all.filter((post) => !seriesOf(post) && topicOf(post) !== 'blogs' && topicOf(post) !== 'debugging').sort(byReadingOrder);
 }
 
 /** Words that stay lowercase inside a title, but not at the start of one. */

@@ -79,7 +79,7 @@ export const PROJECTS: Project[] = [
 	{
 		n: '01',
 		title: 'E-commerce Platform',
-		stack: 'MERN · Admin panel',
+		stack: 'MERN · Tailwind · Sanity · Razorpay · Resend',
 		blurb:
 			'An end-to-end storefront with an admin panel covering the full set of operational utilities, built so the catalogue and orders are handled dynamically rather than hard-coded.',
 		href: 'https://e-commerce-qs8m.vercel.app/',

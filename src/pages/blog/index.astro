@@ -7,20 +7,22 @@ import {
 	getPosts,
 	labelOf,
 	seriesIndex,
-	standalonePosts,
+	blogPosts,
+	debuggingPosts,
 	topicOf,
 } from '../../lib/posts';
 
 const posts = await getPosts();
-const allSeries = seriesIndex(posts);
-const notes = standalonePosts(posts);
+const allSeries = seriesIndex(posts).filter(entry => entry.topic !== 'blogs' && entry.topic !== 'debugging');
+const blogs = blogPosts(posts);
+const debuggings = debuggingPosts(posts);
 
 // Topics, most recently active first — the same ordering the series list uses,
 // so the two zones agree about what is current.
 const latestByTopic = new Map<string, Date>();
 for (const post of posts) {
 	const topic = topicOf(post);
-	if (!topic) continue;
+	if (!topic || topic === 'blogs' || topic === 'debugging') continue;
 	const seen = latestByTopic.get(topic);
 	if (!seen || post.data.pubDate > seen) latestByTopic.set(topic, post.data.pubDate);
 }
@@ -37,7 +39,7 @@ const topics = [...latestByTopic.entries()]
 		<Section n="0" label="Writing">
 			<h1>Writing</h1>
 			<p class="summary">
-				{posts.length} posts, {allSeries.length} series, {notes.length} loose notes,
+				{posts.length} posts, {allSeries.length} notes, {blogs.length} blogs, {debuggings.length} debugging stories,
 				across {topics.length} topics.
 			</p>
 			<div class="topics">
@@ -45,7 +47,7 @@ const topics = [...latestByTopic.entries()]
 			</div>
 		</Section>
 
-		<Section n="1" label="Series">
+		<Section n="1" label="Notes">
 			<p class="zone-note">
 				Things I'm working through in order. Each one is meant to be read start
 				to finish.
@@ -66,13 +68,31 @@ const topics = [...latestByTopic.entries()]
 			</div>
 		</Section>
 
-		<Section n="2" label="Notes">
+		<Section n="2" label="Blogs">
 			<p class="zone-note">
-				Standalone posts that aren't part of anything larger.
+				My views and opinions.
 			</p>
 			<div class="rows">
 				{
-					notes.map((post) => (
+					blogs.map((post) => (
+						<LeaderRow href={`/blog/${post.id}/`}>
+							{post.data.title}
+							<Fragment slot="right">
+								<FormattedDate date={post.data.pubDate} />
+							</Fragment>
+						</LeaderRow>
+					))
+				}
+			</div>
+		</Section>
+
+		<Section n="3" label="Debugging Stories">
+			<p class="zone-note">
+				Deep dives into issues I've debugged.
+			</p>
+			<div class="rows">
+				{
+					debuggings.map((post) => (
 						<LeaderRow href={`/blog/${post.id}/`}>
 							{post.data.title}
 							<Fragment slot="right">
